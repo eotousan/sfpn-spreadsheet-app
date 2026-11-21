@@ -1,0 +1,3630 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>埼玉フードパントリーネットワーク 月次活動予定・実績管理システム</title>
+  <style>
+    :root {
+      --navy-950: #0c1f35;
+      --navy-900: #143252;
+      --navy-800: #1e4670;
+      --navy-700: #2b5c8f;
+      --navy-100: #e6eff8;
+      --emerald-800: #0f4c36;
+      --emerald-700: #146347;
+      --emerald-600: #1b7a58;
+      --emerald-500: #23966d;
+      --emerald-100: #d1fae5;
+      --emerald-50: #ecfdf5;
+      --amber-700: #b45309;
+      --amber-600: #d97706;
+      --amber-500: #f59e0b;
+      --amber-100: #fef3c7;
+      --amber-50: #fffbeb;
+      --red-700: #b91c1c;
+      --red-600: #dc2626;
+      --red-100: #fee2e2;
+      --red-50: #fef2f2;
+      --gray-900: #111827;
+      --gray-800: #1f2937;
+      --gray-700: #374151;
+      --gray-600: #4b5563;
+      --gray-500: #6b7280;
+      --gray-300: #d1d5db;
+      --gray-200: #e5e7eb;
+      --gray-100: #f3f4f6;
+      --gray-50: #f9fafb;
+      --white: #ffffff;
+      --radius-lg: 12px;
+      --radius-md: 8px;
+      --radius-sm: 6px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Meiryo", "Yu Gothic", sans-serif;
+      background-color: var(--gray-100);
+      color: var(--gray-900);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .container {
+      max-width: 1340px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* ヘッダー */
+    .app-header {
+      background: linear-gradient(135deg, var(--navy-950) 0%, var(--navy-800) 60%, var(--emerald-800) 100%);
+      color: var(--white);
+      padding: 16px 0 0 0;
+      box-shadow: var(--shadow-md);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .header-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 14px;
+    }
+
+    .brand-block {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-sub {
+      margin: 2px 0 0 0;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.86);
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mode-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .mode-badge.demo {
+      background-color: var(--amber-100);
+      color: var(--amber-700);
+      border: 1px solid #fbbf24;
+    }
+
+    .mode-badge.prod {
+      background-color: var(--emerald-100);
+      color: var(--emerald-800);
+      border: 1px solid #34d399;
+    }
+
+    /* ナビゲーションタブ */
+    .tab-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tab-btn {
+      appearance: none;
+      border: none;
+      background: rgba(255, 255, 255, 0.13);
+      color: rgba(255, 255, 255, 0.92);
+      padding: 12px 18px;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 10px 10px 0 0;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      font-family: inherit;
+    }
+
+    .tab-btn:hover {
+      background: rgba(255, 255, 255, 0.24);
+      color: var(--white);
+    }
+
+    .tab-btn.active {
+      background: var(--gray-100);
+      color: var(--navy-900);
+      box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.12);
+    }
+
+    .main-content {
+      padding: 20px 0 56px 0;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* 共通カード・ボタン */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .card-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--navy-900);
+    }
+
+    .notice-banner {
+      background: var(--navy-100);
+      border-left: 4px solid var(--navy-700);
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      margin-bottom: 18px;
+      font-size: 13px;
+      color: var(--navy-900);
+    }
+
+    .notice-banner strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 3px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .btn-sm {
+      padding: 6px 11px;
+      font-size: 12px;
+      border-radius: var(--radius-sm);
+    }
+
+    .btn-lg {
+      padding: 12px 26px;
+      font-size: 15px;
+    }
+
+    .btn-primary {
+      background-color: var(--emerald-600);
+      color: var(--white);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background-color: var(--emerald-700);
+    }
+
+    .btn-navy {
+      background-color: var(--navy-800);
+      color: var(--white);
+    }
+
+    .btn-navy:hover:not(:disabled) {
+      background-color: var(--navy-900);
+    }
+
+    .btn-amber {
+      background-color: var(--amber-600);
+      color: var(--white);
+    }
+
+    .btn-amber:hover:not(:disabled) {
+      background-color: var(--amber-700);
+    }
+
+    .btn-danger {
+      background-color: var(--red-600);
+      color: var(--white);
+    }
+
+    .btn-danger:hover:not(:disabled) {
+      background-color: var(--red-700);
+    }
+
+    .btn-outline {
+      background-color: var(--white);
+      color: var(--gray-800);
+      border-color: var(--gray-300);
+    }
+
+    .btn-outline:hover:not(:disabled) {
+      background-color: var(--gray-50);
+      border-color: var(--gray-500);
+    }
+
+    .btn-header {
+      background-color: rgba(255, 255, 255, 0.16);
+      color: var(--white);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+
+    .btn-header:hover {
+      background-color: rgba(255, 255, 255, 0.28);
+    }
+
+    /* フォーム要素 */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gray-700);
+      margin-bottom: 5px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 9px 12px;
+      font-size: 14px;
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-md);
+      background-color: var(--white);
+      color: var(--gray-900);
+      font-family: inherit;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--navy-700);
+      box-shadow: 0 0 0 3px rgba(43, 92, 143, 0.15);
+    }
+
+    .pin-mono {
+      font-family: "Consolas", "Monaco", "Courier New", monospace;
+      letter-spacing: 0.14em;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .pin-hint-box {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      background: var(--amber-50);
+      border: 1px dashed var(--amber-500);
+      padding: 6px 12px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      color: var(--amber-700);
+      margin-top: 6px;
+    }
+
+    /* 月選択クイックバー */
+    .month-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .month-pill {
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--gray-300);
+      background: var(--white);
+      color: var(--gray-700);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: inherit;
+    }
+
+    .month-pill.active {
+      background: var(--navy-800);
+      color: var(--white);
+      border-color: var(--navy-800);
+    }
+
+    .pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gray-300);
+      display: inline-block;
+    }
+
+    .pill-dot.plan {
+      background: var(--amber-500);
+    }
+
+    .pill-dot.done {
+      background: var(--emerald-500);
+    }
+
+    /* リアルタイム合計サマリーバー */
+    .live-summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    @media (max-width: 780px) {
+      .live-summary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .live-summary-box {
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .live-summary-box.plan {
+      background: var(--amber-50);
+      border: 2px solid #fbbf24;
+    }
+
+    .live-summary-box.actual {
+      background: var(--emerald-50);
+      border: 2px solid var(--emerald-500);
+    }
+
+    .live-metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .box-tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .box-tag.plan {
+      background-color: var(--amber-600);
+      color: var(--white);
+    }
+
+    .box-tag.actual {
+      background-color: var(--emerald-600);
+      color: var(--white);
+    }
+
+    /* 2カラム入力（予定 vs 実績・最大8回） */
+    .dual-entry-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    @media (max-width: 920px) {
+      .dual-entry-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .entry-box-plan {
+      background: var(--amber-50);
+      border: 1px solid #fcd34d;
+      border-radius: var(--radius-lg);
+      padding: 16px;
+    }
+
+    .entry-box-actual {
+      background: var(--emerald-50);
+      border: 1px solid #6ee7b7;
+      border-radius: var(--radius-lg);
+      padding: 16px;
+    }
+
+    .session-card {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+
+    .session-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px dashed var(--gray-200);
+    }
+
+    .session-num-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .session-num-badge.plan {
+      background-color: var(--amber-100);
+      color: var(--amber-700);
+    }
+
+    .session-num-badge.actual {
+      background-color: var(--emerald-100);
+      color: var(--emerald-700);
+    }
+
+    .session-fields {
+      display: grid;
+      grid-template-columns: 1.35fr 0.85fr 0.9fr;
+      gap: 8px;
+    }
+
+    @media (max-width: 540px) {
+      .session-fields {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .session-field-lbl {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gray-600);
+      margin-bottom: 3px;
+    }
+
+    .session-input {
+      width: 100%;
+      padding: 7px 9px;
+      font-size: 14px;
+      border: 1px solid var(--gray-300);
+      border-radius: 6px;
+      background-color: var(--white);
+      color: var(--gray-900);
+      font-family: inherit;
+    }
+
+    .session-input:focus {
+      outline: none;
+      border-color: var(--emerald-600);
+      box-shadow: 0 0 0 2px rgba(27, 122, 88, 0.15);
+    }
+
+    .session-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    /* KPIカード */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 1040px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 560px) {
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .kpi-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--gray-200);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gray-600);
+      margin-bottom: 6px;
+    }
+
+    .kpi-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--navy-900);
+      margin-bottom: 6px;
+    }
+
+    .kpi-value span {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-600);
+    }
+
+    .kpi-sub {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--gray-600);
+      padding-top: 6px;
+      border-top: 1px solid var(--gray-100);
+    }
+
+    /* HTML/CSS バーチャート */
+    .chart-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chart-legend {
+      display: flex;
+      gap: 14px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .legend-dot {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+
+    .chart-wrap {
+      overflow-x: auto;
+      padding-top: 10px;
+    }
+
+    .chart-inner {
+      min-width: 680px;
+    }
+
+    .chart-cols {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 8px;
+      height: 185px;
+      align-items: flex-end;
+      padding: 16px 8px 0 8px;
+      border-bottom: 2px solid var(--gray-300);
+      background: linear-gradient(to top, var(--gray-50) 0%, var(--white) 100%);
+    }
+
+    .chart-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      height: 100%;
+    }
+
+    .chart-val {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--gray-600);
+      margin-bottom: 4px;
+      white-space: nowrap;
+    }
+
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 145px;
+    }
+
+    .bar-plan {
+      width: 14px;
+      background-color: var(--amber-500);
+      border-radius: 3px 3px 0 0;
+      transition: height 0.25s;
+    }
+
+    .bar-actual {
+      width: 14px;
+      background-color: var(--emerald-600);
+      border-radius: 3px 3px 0 0;
+      transition: height 0.25s;
+    }
+
+    .chart-labels {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 8px;
+      padding: 6px 8px 0 8px;
+      text-align: center;
+    }
+
+    .chart-month-lbl {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gray-800);
+    }
+
+    .chart-hh-lbl {
+      font-size: 10px;
+      color: var(--gray-500);
+    }
+
+    /* テーブル */
+    .table-scroll {
+      overflow-x: auto;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: var(--white);
+    }
+
+    th, td {
+      padding: 10px 10px;
+      border-bottom: 1px solid var(--gray-200);
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      background-color: var(--gray-100);
+      font-weight: 700;
+      color: var(--gray-800);
+      white-space: nowrap;
+    }
+
+    th.th-plan {
+      background-color: var(--amber-100);
+      color: var(--amber-700);
+    }
+
+    th.th-actual {
+      background-color: var(--emerald-100);
+      color: var(--emerald-800);
+    }
+
+    tbody tr:hover {
+      background-color: var(--gray-50);
+    }
+
+    tfoot td {
+      background-color: var(--navy-900);
+      color: var(--white);
+      font-weight: 700;
+    }
+
+    .text-right {
+      text-align: right !important;
+    }
+
+    .text-center {
+      text-align: center !important;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .status-done {
+      background-color: var(--emerald-100);
+      color: var(--emerald-800);
+    }
+
+    .status-plan {
+      background-color: var(--amber-100);
+      color: var(--amber-700);
+    }
+
+    .status-none {
+      background-color: var(--gray-200);
+      color: var(--gray-600);
+    }
+
+    .date-pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      max-width: 240px;
+    }
+
+    .date-chip {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .date-chip.plan {
+      background: var(--amber-100);
+      color: #78350f;
+      border: 1px solid #fcd34d;
+    }
+
+    .date-chip.actual {
+      background: var(--emerald-100);
+      color: #064e3b;
+      border: 1px solid #6ee7b7;
+    }
+
+    /* CSVドロップゾーン */
+    .drop-zone {
+      border: 2px dashed var(--navy-700);
+      border-radius: var(--radius-lg);
+      background-color: var(--navy-100);
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .drop-zone:hover,
+    .drop-zone.dragover {
+      background-color: #d5e5f5;
+    }
+
+    /* モーダル */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(12, 31, 53, 0.65);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 22px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .modal-option {
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 12px;
+      background: var(--gray-50);
+    }
+
+    .modal-option h4 {
+      margin: 0 0 6px 0;
+      font-size: 15px;
+      color: var(--navy-900);
+    }
+
+    .modal-option p {
+      margin: 0 0 10px 0;
+      font-size: 13px;
+      color: var(--gray-700);
+    }
+
+    /* トースト通知 */
+    #toast-area {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-width: 390px;
+    }
+
+    .toast-item {
+      background: var(--navy-900);
+      color: var(--white);
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      font-size: 13px;
+      font-weight: 700;
+      border-left: 4px solid var(--emerald-500);
+    }
+
+    .toast-item.error {
+      background: var(--red-700);
+      border-left-color: #fca5a5;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header class="app-header">
+    <div class="container">
+      <div class="header-top">
+        <div class="brand-block">
+          <div class="brand-icon" aria-hidden="true">🍱</div>
+          <div>
+            <h1 class="brand-title">埼玉フードパントリーネットワーク 月次活動予定・実績管理システム</h1>
+            <p class="brand-sub">4月始まり年度集計｜英数字4桁PIN認証（月最大8回開催対応）＆事務局自動集計システム</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <span id="header-mode-badge" class="mode-badge demo">デモ体験モード（サンプル100団体）</span>
+          <button type="button" id="open-data-modal-btn" class="btn btn-header btn-sm">
+            ⚙ 本番モード切替・データ管理
+          </button>
+        </div>
+      </div>
+
+      <!-- 3タブ切り替えナビゲーション -->
+      <nav class="tab-nav" role="tablist">
+        <button type="button" class="tab-btn active" data-tab="panel-org-form">
+          ① 各団体向け：月次報告フォーム
+        </button>
+        <button type="button" class="tab-btn" data-tab="panel-admin-summary">
+          ② 事務局向け：全体集計・ダッシュボード
+        </button>
+        <button type="button" class="tab-btn" data-tab="panel-org-master">
+          ③ 団体マスタ・PIN管理（CSV一括取込）
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <main class="main-content">
+    <div class="container">
+
+      <!-- =========================================================
+           タブ1：各団体向け：月次報告フォーム（最大8回開催対応）
+           ========================================================= -->
+      <section id="panel-org-form" class="tab-panel active">
+        <div class="notice-banner">
+          <strong>【他団体の誤編集を防止】団体専用4桁英数字PIN認証・月最大8回開催対応フォーム</strong>
+          集計表全体を直接編集する方式ではなく、団体ごとに割り当てられた<strong>4桁の英数字PINコード（例: K4M9）</strong>でロック解除した団体のみ入力欄が開きます。1ヶ月あたり<strong>第1回〜第8回まで</strong>の開催日・対象世帯数・配布量（kg）を個別に記録でき、月間合計が自動計算されます。
+        </div>
+
+        <!-- ステップ1：団体選択＆PIN認証カード -->
+        <div id="auth-box" class="card">
+          <div class="card-header">
+            <h2 class="card-title">ステップ1：自団体の選択と専用PINコード認証</h2>
+            <span id="org-count-indicator" style="font-size:13px; font-weight:700; color:var(--gray-600);">登録団体数: 100団体</span>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="form-month-select">対象月（2026年度：4月〜翌3月）</label>
+              <select id="form-month-select" class="form-control">
+                <option value="4">2026年 4月</option>
+                <option value="5">2026年 5月</option>
+                <option value="6">2026年 6月</option>
+                <option value="7">2026年 7月</option>
+                <option value="8">2026年 8月</option>
+                <option value="9">2026年 9月</option>
+                <option value="10">2026年 10月</option>
+                <option value="11" selected>2026年 11月</option>
+                <option value="12">2026年 12月</option>
+                <option value="1">2027年 1月</option>
+                <option value="2">2027年 2月</option>
+                <option value="3">2027年 3月</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="form-area-filter">エリア絞り込み</label>
+              <select id="form-area-filter" class="form-control">
+                <option value="ALL">すべてのエリア（埼玉県全域）</option>
+                <option value="さいたま市">さいたま市</option>
+                <option value="川口・県南">川口・県南</option>
+                <option value="川越・県西">川越・県西</option>
+                <option value="春日部・県東">春日部・県東</option>
+                <option value="熊谷・県北">熊谷・県北</option>
+                <option value="秩父・比企">秩父・比企</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="form-org-search">団体名・コード検索</label>
+              <input type="text" id="form-org-search" class="form-control" placeholder="例: 大宮、FP-001..." />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="form-org-select">報告する団体を選択</label>
+              <select id="form-org-select" class="form-control"></select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="form-pin-input">専用PINコード（半角英数字4桁）</label>
+              <div style="display:flex; gap:8px;">
+                <input type="text" id="form-pin-input" class="form-control pin-mono" maxlength="4" placeholder="例: K4M9" autocomplete="off" />
+                <button type="button" id="unlock-org-btn" class="btn btn-primary" style="white-space:nowrap;">
+                  🔓 入力画面を開く
+                </button>
+              </div>
+              <div id="demo-pin-helper" class="pin-hint-box">
+                <span>デモ用PIN: <strong id="demo-pin-display" class="pin-mono" style="font-size:15px;">----</strong></span>
+                <button type="button" id="auto-fill-pin-btn" class="btn btn-amber btn-sm" style="padding:3px 8px;">
+                  ワンクリック入力
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ステップ2：認証後に開く自団体専用入力ワークスペース -->
+        <div id="org-workspace" class="hidden">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <span id="ws-org-meta" style="font-size:12px; font-weight:700; color:var(--emerald-700);">FP-001｜さいたま市</span>
+                <h2 id="ws-org-title" class="card-title" style="font-size:20px; margin-top:2px;">団体名</h2>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span id="ws-status-badge"></span>
+                <button type="button" id="lock-org-btn" class="btn btn-outline btn-sm">
+                  🔒 ロックして団体選択に戻る
+                </button>
+              </div>
+            </div>
+
+            <!-- 4月〜翌3月の月切り替えクイックバー -->
+            <div>
+              <div style="font-size:12px; font-weight:700; color:var(--gray-600); margin-bottom:6px;">
+                月を選択して入力（緑丸：実績報告済 ／ 黄丸：予定入力済 ／ 灰丸：未報告）
+              </div>
+              <div id="ws-month-pills" class="month-pills"></div>
+            </div>
+
+            <h3 id="ws-current-month-heading" style="font-size:18px; color:var(--navy-900); margin:16px 0 12px 0;">
+              2026年 11月分の予定・実績入力（第1回〜第8回）
+            </h3>
+
+            <!-- リアルタイム自動計算サマリーバー -->
+            <div class="live-summary-grid">
+              <div class="live-summary-box plan">
+                <div>
+                  <span class="box-tag plan">予定合計（自動計算）</span>
+                  <div style="font-size:12px; color:#78350f;">入力された開催回の合算</div>
+                </div>
+                <div class="live-metrics" style="color:#78350f;">
+                  <span>開催: <strong id="live-plan-count" style="font-size:17px;">0</strong> 回</span>
+                  <span>世帯: <strong id="live-plan-hh" style="font-size:17px;">0</strong> 世帯</span>
+                  <span>配布量: <strong id="live-plan-wt" style="font-size:17px;">0.0</strong> kg</span>
+                </div>
+              </div>
+
+              <div class="live-summary-box actual">
+                <div>
+                  <span class="box-tag actual">実績合計（自動計算）</span>
+                  <div style="font-size:12px; color:#064e3b;">実施後の実数合算</div>
+                </div>
+                <div class="live-metrics" style="color:#064e3b;">
+                  <span>実施: <strong id="live-actual-count" style="font-size:17px;">0</strong> 回</span>
+                  <span>世帯: <strong id="live-actual-hh" style="font-size:17px;">0</strong> 世帯</span>
+                  <span>配布量: <strong id="live-actual-wt" style="font-size:17px;">0.0</strong> kg</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 予定と実績の2カラム入力（最大8回） -->
+            <div class="dual-entry-grid">
+              <!-- 左：開催前の予定 -->
+              <div class="entry-box-plan">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:8px;">
+                  <span class="box-tag plan" style="margin-bottom:0;">開催前入力：予定（最大8回）</span>
+                  <span id="plan-slot-counter" style="font-size:12px; font-weight:700; color:#78350f;">表示中: 2 / 8 回</span>
+                </div>
+                <h4 style="margin:0 0 12px 0; font-size:15px; color:#78350f;">開催回ごとの予定日・予定世帯数・予定配布量</h4>
+
+                <div id="plan-sessions-list"></div>
+
+                <div class="session-toolbar">
+                  <button type="button" id="add-plan-session-btn" class="btn btn-amber btn-sm">
+                    ＋ 開催日を追加（最大8回）
+                  </button>
+                  <button type="button" id="expand-plan-8-btn" class="btn btn-outline btn-sm">
+                    8回分すべて展開
+                  </button>
+                </div>
+              </div>
+
+              <!-- 右：実施後の実績 -->
+              <div class="entry-box-actual">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px; margin-bottom:8px;">
+                  <span class="box-tag actual" style="margin-bottom:0;">実施後入力：実績（最大8回）</span>
+                  <button type="button" id="copy-plan-to-actual-btn" class="btn btn-primary btn-sm">
+                    📋 予定内容を実績へ一括コピー
+                  </button>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                  <h4 style="margin:0; font-size:15px; color:#064e3b;">開催回ごとの実施日・実績世帯数・実績配布量</h4>
+                  <span id="actual-slot-counter" style="font-size:12px; font-weight:700; color:#064e3b;">表示中: 2 / 8 回</span>
+                </div>
+
+                <div id="actual-sessions-list"></div>
+
+                <div class="session-toolbar">
+                  <button type="button" id="add-actual-session-btn" class="btn btn-primary btn-sm">
+                    ＋ 開催日を追加（最大8回）
+                  </button>
+                  <button type="button" id="expand-actual-8-btn" class="btn btn-outline btn-sm">
+                    8回分すべて展開
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 備考 -->
+            <div class="form-group">
+              <label class="form-label" for="input-report-memo">特記事項・事務局への連絡メモ（任意）</label>
+              <input type="text" id="input-report-memo" class="form-control" placeholder="例：お米の寄付が多く通常より配布量が増えました、など" />
+            </div>
+
+            <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px; padding-top:10px; border-top:1px solid var(--gray-200);">
+              <button type="button" id="clear-month-report-btn" class="btn btn-outline btn-sm">
+                この月の入力内容をクリア
+              </button>
+              <button type="button" id="save-month-report-btn" class="btn btn-primary btn-lg">
+                💾 この内容で保存・報告する
+              </button>
+            </div>
+          </div>
+
+          <!-- 自団体の年間履歴確認表 -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">自団体の年間活動記録一覧（4月〜翌3月）</h3>
+            </div>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>月</th>
+                    <th>状況</th>
+                    <th class="th-plan">予定回数・開催予定日</th>
+                    <th class="th-plan text-right">予定世帯合計</th>
+                    <th class="th-plan text-right">予定量合計(kg)</th>
+                    <th class="th-actual">実績回数・実施日</th>
+                    <th class="th-actual text-right">実績世帯合計</th>
+                    <th class="th-actual text-right">実績量合計(kg)</th>
+                    <th class="text-center">操作</th>
+                  </tr>
+                </thead>
+                <tbody id="ws-annual-tbody"></tbody>
+                <tfoot id="ws-annual-tfoot"></tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- =========================================================
+           タブ2：事務局向け：全体集計・ダッシュボード
+           ========================================================= -->
+      <section id="panel-admin-summary" class="tab-panel">
+        <!-- 絞り込み＆CSV出力バー -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">事務局向け 全体集計・ダッシュボード（自動集計・読み取り専用）</h2>
+            <div style="display:flex; flex-wrap:wrap; gap:8px;">
+              <button type="button" id="export-current-csv-btn" class="btn btn-primary">
+                📥 表示中の集計表CSV出力
+              </button>
+              <button type="button" id="export-annual-csv-btn" class="btn btn-navy">
+                📊 年間全データ詳細CSV出力（第1〜8回内訳含む）
+              </button>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label" for="admin-period-select">表示対象期間</label>
+              <select id="admin-period-select" class="form-control">
+                <option value="4">2026年 4月分</option>
+                <option value="5">2026年 5月分</option>
+                <option value="6">2026年 6月分</option>
+                <option value="7">2026年 7月分</option>
+                <option value="8">2026年 8月分</option>
+                <option value="9">2026年 9月分</option>
+                <option value="10">2026年 10月分</option>
+                <option value="11" selected>2026年 11月分</option>
+                <option value="12">2026年 12月分</option>
+                <option value="1">2027年 1月分</option>
+                <option value="2">2027年 2月分</option>
+                <option value="3">2027年 3月分</option>
+                <option value="ALL">★ 年度累計（4月〜3月合計）</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label" for="admin-area-select">エリア絞り込み</label>
+              <select id="admin-area-select" class="form-control">
+                <option value="ALL">すべて（埼玉県全域）</option>
+                <option value="さいたま市">さいたま市</option>
+                <option value="川口・県南">川口・県南</option>
+                <option value="川越・県西">川越・県西</option>
+                <option value="春日部・県東">春日部・県東</option>
+                <option value="熊谷・県北">熊谷・県北</option>
+                <option value="秩父・比企">秩父・比企</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label" for="admin-status-select">提出状況絞り込み</label>
+              <select id="admin-status-select" class="form-control">
+                <option value="ALL">すべて表示</option>
+                <option value="REPORTED">報告済のみ（実績報告済＋予定入力済）</option>
+                <option value="ACTUAL_DONE">実績報告済のみ</option>
+                <option value="PLAN_ONLY">予定入力済のみ</option>
+                <option value="UNSUBMITTED">未報告のみ</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label" for="admin-search-input">団体名・コード検索</label>
+              <input type="text" id="admin-search-input" class="form-control" placeholder="例: 大宮、FP-001..." />
+            </div>
+          </div>
+        </div>
+
+        <!-- 4つのKPIサマリーカード -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">1. 提出率・報告団体数</div>
+            <div class="kpi-value" id="kpi-submit-val">0 <span>/ 100 団体</span></div>
+            <div class="kpi-sub">
+              <strong id="kpi-submit-rate" style="color:var(--emerald-700);">提出率 0%</strong>
+              <span id="kpi-unsubmit-txt" style="color:var(--red-600);">未報告: 0団体</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-label">2. 総開催回数（実績 / 予定）</div>
+            <div class="kpi-value" id="kpi-sessions-actual">0 <span>回（実績）</span></div>
+            <div class="kpi-sub">
+              <span>予定延べ: <strong id="kpi-sessions-plan">0</strong> 回</span>
+              <span id="kpi-sessions-avg">平均 0.0回/団体</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-label">3. 配布対象世帯数合計（実績 / 予定）</div>
+            <div class="kpi-value" id="kpi-hh-actual">0 <span>世帯（実績）</span></div>
+            <div class="kpi-sub">
+              <span>予定合計: <strong id="kpi-hh-plan">0</strong> 世帯</span>
+              <span id="kpi-hh-diff">予定比 +0世帯</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-label">4. 配布量合計（実績 / 予定）</div>
+            <div class="kpi-value" id="kpi-wt-actual">0 <span>kg</span></div>
+            <div class="kpi-sub">
+              <span>予定: <strong id="kpi-wt-plan">0</strong> kg</span>
+              <strong id="kpi-wt-ton" style="color:var(--navy-700);">約 0.00 トン（1世帯平均 0.0kg）</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4月〜3月 年間月別推移バーチャート（配布量kg / 配布世帯数切替付） -->
+        <div class="card">
+          <div class="card-header">
+            <h3 id="chart-heading" class="card-title">年間月別推移グラフ（4月〜翌3月 配布量kg推移）</h3>
+            <div class="chart-controls">
+              <div style="display:inline-flex; border:1px solid var(--gray-300); border-radius:6px; overflow:hidden;">
+                <button type="button" id="chart-mode-wt-btn" class="btn btn-navy btn-sm" style="border-radius:0;">配布量(kg)</button>
+                <button type="button" id="chart-mode-hh-btn" class="btn btn-outline btn-sm" style="border-radius:0; border:none;">配布世帯数</button>
+              </div>
+              <div class="chart-legend">
+                <span><span class="legend-dot" style="background:var(--amber-500);"></span>予定</span>
+                <span><span class="legend-dot" style="background:var(--emerald-600);"></span>実績</span>
+              </div>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <div class="chart-inner">
+              <div id="css-bar-chart" class="chart-cols"></div>
+              <div id="css-bar-labels" class="chart-labels"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 全団体集計一覧テーブル -->
+        <div class="card">
+          <div class="card-header">
+            <h3 id="admin-table-heading" class="card-title">2026年度 11月分 全団体集計一覧表</h3>
+            <span id="admin-filtered-count" style="font-size:13px; font-weight:700; color:var(--gray-600);">表示件数: 100件</span>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>団体コード</th>
+                  <th>エリア</th>
+                  <th>団体名</th>
+                  <th class="text-center">提出状況</th>
+                  <th class="text-center">予定/実績回数</th>
+                  <th>開催日一覧（最大8回）</th>
+                  <th class="th-plan text-right">予定世帯</th>
+                  <th class="th-actual text-right">実績世帯</th>
+                  <th class="th-plan text-right">予定量(kg)</th>
+                  <th class="th-actual text-right">実績量(kg)</th>
+                  <th class="text-center">達成率</th>
+                  <th class="text-center">内訳</th>
+                </tr>
+              </thead>
+              <tbody id="admin-summary-tbody"></tbody>
+              <tfoot id="admin-summary-tfoot"></tfoot>
+            </table>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- =========================================================
+           タブ3：団体マスタ・PIN管理（CSV一括取込＆英数字PIN一括再発行）
+           ========================================================= -->
+      <section id="panel-org-master" class="tab-panel">
+        <!-- CSV一括取込カード -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">CSVファイルからの加盟団体リスト一括インポート</h2>
+            <button type="button" id="download-csv-template-btn" class="btn btn-outline">
+              📄 入力用CSVテンプレートダウンロード
+            </button>
+          </div>
+
+          <p style="font-size:13px; color:var(--gray-700); margin-top:0;">
+            Excel等で作成した加盟団体リスト（列：<strong>団体コード, 団体名, 市町村, エリア, PINコード</strong>）をCSV保存して読み込めます。<br />
+            ※文字コード（Shift-JIS / UTF-8）を自動判別し、「エリア」が空欄でも市町村名から埼玉県6エリアを自動判定、「PINコード」が空欄の場合は<strong>視認性の高い英数字混在4桁（0/O、1/I/L除外）</strong>を重複なしで自動採番します。
+          </p>
+
+          <div id="csv-drop-zone" class="drop-zone">
+            <div style="font-size:28px; margin-bottom:6px;">📂</div>
+            <div style="font-weight:700; color:var(--navy-900); margin-bottom:4px;">
+              ここにCSVファイルをドラッグ＆ドロップ、またはクリックしてファイル選択
+            </div>
+            <div style="font-size:12px; color:var(--gray-600);">対応形式: .csv（Shift-JIS / UTF-8 自動判定）</div>
+            <input type="file" id="csv-file-input" accept=".csv,text/csv" class="hidden" />
+          </div>
+
+          <!-- プレビュー領域 -->
+          <div id="csv-preview-box" class="hidden" style="margin-top:16px; padding-top:16px; border-top:1px solid var(--gray-200);">
+            <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px;">
+              <strong id="csv-preview-summary" style="color:var(--navy-900);">読込プレビュー: 0件</strong>
+              <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                <button type="button" id="csv-import-replace-btn" class="btn btn-primary btn-sm">
+                  ✓ 現在の団体リストを上書き置換して登録
+                </button>
+                <button type="button" id="csv-import-append-btn" class="btn btn-navy btn-sm">
+                  ＋ 現在の団体リストへ追加登録
+                </button>
+                <button type="button" id="csv-preview-cancel-btn" class="btn btn-outline btn-sm">
+                  キャンセル
+                </button>
+              </div>
+            </div>
+            <div class="table-scroll" style="max-height:260px;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>団体コード</th>
+                    <th>団体名</th>
+                    <th>判定エリア</th>
+                    <th>PINコード（英数字4桁）</th>
+                  </tr>
+                </thead>
+                <tbody id="csv-preview-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 個別新規追加＆一覧管理 -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">登録団体マスタ一覧・PIN管理（現在 <span id="master-total-count">100</span> 団体）</h2>
+            <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+              <button type="button" id="bulk-reissue-pin-btn" class="btn btn-amber btn-sm">
+                🔑 全団体のPINを英数字混在で一括再発行
+              </button>
+              <button type="button" id="export-master-pin-csv-btn" class="btn btn-navy btn-sm">
+                📥 団体マスタ・PIN一覧CSV出力
+              </button>
+              <input type="text" id="master-search-input" class="form-control" style="width:200px;" placeholder="団体名・コード検索..." />
+            </div>
+          </div>
+
+          <!-- 1団体個別追加フォーム -->
+          <div style="background:var(--gray-50); border:1px solid var(--gray-200); border-radius:var(--radius-md); padding:14px; margin-bottom:16px;">
+            <div style="font-size:13px; font-weight:700; color:var(--navy-900); margin-bottom:10px;">＋ 新規団体の個別追加（PIN空欄時は英数字混在4桁を自動採番）</div>
+            <div class="form-grid" style="align-items:end;">
+              <div class="form-group" style="margin-bottom:0;">
+                <label class="form-label" for="new-org-code">団体コード</label>
+                <input type="text" id="new-org-code" class="form-control" placeholder="例: FP-101" />
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label class="form-label" for="new-org-area">エリア</label>
+                <select id="new-org-area" class="form-control">
+                  <option value="さいたま市">さいたま市</option>
+                  <option value="川口・県南">川口・県南</option>
+                  <option value="川越・県西">川越・県西</option>
+                  <option value="春日部・県東">春日部・県東</option>
+                  <option value="熊谷・県北">熊谷・県北</option>
+                  <option value="秩父・比企">秩父・比企</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label class="form-label" for="new-org-name">団体名</label>
+                <input type="text" id="new-org-name" class="form-control" placeholder="例: 〇〇フードパントリー" />
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label class="form-label" for="new-org-pin">専用PIN（半角英数字4桁）</label>
+                <input type="text" id="new-org-pin" class="form-control pin-mono" maxlength="4" placeholder="空欄なら自動採番" />
+              </div>
+              <div>
+                <button type="button" id="add-single-org-btn" class="btn btn-primary" style="width:100%;">
+                  追加登録する
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-scroll" style="max-height:480px;">
+            <table>
+              <thead>
+                <tr>
+                  <th>団体コード</th>
+                  <th>エリア</th>
+                  <th>団体名（直接編集可）</th>
+                  <th class="text-center">専用PINコード（英数字4桁）</th>
+                  <th class="text-center">PIN再発行 / 削除</th>
+                </tr>
+              </thead>
+              <tbody id="master-org-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- 団体別 第1回〜第8回 内訳詳細モーダル -->
+  <div id="detail-modal" class="modal-backdrop" role="dialog" aria-modal="true">
+    <div class="modal-box" style="max-width:780px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:12px; border-bottom:1px solid var(--gray-200); margin-bottom:16px;">
+        <div>
+          <span id="detail-modal-sub" style="font-size:12px; font-weight:700; color:var(--emerald-700);">FP-001｜さいたま市</span>
+          <h2 id="detail-modal-title" style="margin:2px 0 0 0; font-size:18px; color:var(--navy-900);">団体名 開催回別内訳（第1回〜第8回）</h2>
+        </div>
+        <button type="button" id="close-detail-modal-btn" class="btn btn-outline btn-sm">✕ 閉じる</button>
+      </div>
+      <div id="detail-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- 本番モード切替・データ管理モーダル -->
+  <div id="data-modal" class="modal-backdrop" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:12px; border-bottom:1px solid var(--gray-200); margin-bottom:16px;">
+        <h2 style="margin:0; font-size:18px; color:var(--navy-900);">⚙ 本番モード切替・データ管理</h2>
+        <button type="button" id="close-data-modal-btn" class="btn btn-outline btn-sm">✕ 閉じる</button>
+      </div>
+
+      <div class="modal-option">
+        <h4>選択肢A：サンプル実績のみ消去（団体リストは残してゼロから開始）</h4>
+        <p>現在登録されている団体マスタ・PINコードはそのまま残し、4月〜翌3月の予定・実績データのみすべてゼロにして本番運用モードへ切り替えます。</p>
+        <button type="button" id="mode-clear-reports-btn" class="btn btn-primary btn-sm">
+          実績データのみ空にして本番モードへ切替
+        </button>
+      </div>
+
+      <div class="modal-option">
+        <h4>選択肢B：完全初期化（100団体サンプルもすべて空にして本番CSV取込待ちにする）</h4>
+        <p>サンプル団体とサンプル実績をすべて消去し、登録0件の真っさらな本番運用モードへ切り替えます。その後「③ 団体マスタ・PIN管理」から本物のCSV名簿を取り込んでください。</p>
+        <button type="button" id="mode-full-reset-btn" class="btn btn-danger btn-sm">
+          すべて空にして完全初期化
+        </button>
+      </div>
+
+      <div class="modal-option">
+        <h4>デモ用100団体サンプルデータを再読込</h4>
+        <p>埼玉県内のサンプル100団体（英数字混在4桁PIN付き）と4月〜12月分のリアルなサンプルデータ（月1〜4回開催）を再生成し、デモ体験モードに戻します。</p>
+        <button type="button" id="mode-restore-demo-btn" class="btn btn-amber btn-sm">
+          デモ用100団体サンプルデータを再読込
+        </button>
+      </div>
+
+      <div class="modal-option" style="margin-bottom:0;">
+        <h4>全データJSONバックアップ保存 / 復元</h4>
+        <p>団体マスタ・PIN・年間報告データを丸ごと1つのJSONファイルに保存したり、保存したファイルから復元したりできます。</p>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <button type="button" id="backup-json-export-btn" class="btn btn-navy btn-sm">
+            💾 全データJSONバックアップ保存
+          </button>
+          <button type="button" id="backup-json-import-btn" class="btn btn-outline btn-sm">
+            📂 JSONバックアップから復元
+          </button>
+          <input type="file" id="backup-json-file-input" accept=".json,application/json" class="hidden" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- トースト通知エリア -->
+  <div id="toast-area"></div>
+
+  <!-- =========================================================
+       純粋Vanilla JS（外部ライブラリ非依存・完全自己完結版）
+       ========================================================= -->
+  <script>
+    (function () {
+      'use strict';
+
+      var STORAGE_KEY = 'saitama_foodpantry_system_v5_alnum_pin';
+      var FISCAL_MONTHS = [4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3];
+      var MAX_SESSIONS = 8;
+
+      // 紛らわしい文字（0/O, 1/I/L）を除外した視認性の高い文字セット
+      var PIN_LETTERS = 'ABCDEFGHJKMNPQRSTUVWXYZ'; // 23文字
+      var PIN_DIGITS = '23456789';                 // 8文字
+      var PIN_ALL_CHARS = PIN_LETTERS + PIN_DIGITS;
+
+      var state = {
+        mode: 'demo',
+        fiscalYear: 2026,
+        organizations: [],
+        reports: {},
+        authenticatedOrgId: null,
+        editingMonth: 11,
+        planSessionsTemp: [],
+        actualSessionsTemp: [],
+        csvPreviewList: [],
+        chartMetric: 'weight' // 'weight' | 'households'
+      };
+
+      // ---------------------------------------------------------
+      // 安全なDOM操作・ユーティリティ
+      // ---------------------------------------------------------
+      function byId(id) {
+        return document.getElementById(id);
+      }
+
+      function showToast(msg, isError) {
+        try {
+          var area = byId('toast-area');
+          if (!area) return;
+          var item = document.createElement('div');
+          item.className = 'toast-item' + (isError ? ' error' : '');
+          item.textContent = String(msg || '');
+          area.appendChild(item);
+          setTimeout(function () {
+            if (item && item.parentNode) {
+              item.parentNode.removeChild(item);
+            }
+          }, 3400);
+        } catch (e) {
+          console.error('Toast error:', e);
+        }
+      }
+
+      function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function normalizePinInput(raw) {
+        return String(raw || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+      }
+
+      // 必ず半角英大文字と数字が混在する4桁PIN（重複なし）を生成
+      function generateUniqueAlnumPin(usedSet) {
+        var set = usedSet || new Set();
+        for (var attempt = 0; attempt < 2000; attempt++) {
+          var chars = [];
+          // 最低1文字は英字、最低1文字は数字を保証
+          chars.push(PIN_LETTERS.charAt(Math.floor(Math.random() * PIN_LETTERS.length)));
+          chars.push(PIN_DIGITS.charAt(Math.floor(Math.random() * PIN_DIGITS.length)));
+          chars.push(PIN_ALL_CHARS.charAt(Math.floor(Math.random() * PIN_ALL_CHARS.length)));
+          chars.push(PIN_ALL_CHARS.charAt(Math.floor(Math.random() * PIN_ALL_CHARS.length)));
+
+          // シャッフル
+          for (var i = chars.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = chars[i];
+            chars[i] = chars[j];
+            chars[j] = tmp;
+          }
+          var pin = chars.join('');
+          if (!set.has(pin)) {
+            set.add(pin);
+            return pin;
+          }
+        }
+        return 'A2B3';
+      }
+
+      function getCurrentPinSet(excludeOrgId) {
+        var set = new Set();
+        state.organizations.forEach(function (o) {
+          if (o.id !== excludeOrgId && o.pin) {
+            set.add(normalizePinInput(o.pin));
+          }
+        });
+        return set;
+      }
+
+      function createEmptySession() {
+        return { date: '', households: '', weight: '' };
+      }
+
+      function isSessionFilled(s) {
+        if (!s) return false;
+        var hasDate = s.date && String(s.date).trim() !== '';
+        var hasH = s.households !== '' && s.households !== null && s.households !== undefined && !isNaN(Number(s.households));
+        var hasW = s.weight !== '' && s.weight !== null && s.weight !== undefined && !isNaN(Number(s.weight));
+        return hasDate || hasH || hasW;
+      }
+
+      function summarizeMonthReport(rep) {
+        var res = {
+          planCount: 0,
+          planHouseholds: 0,
+          planWeight: 0,
+          planDates: [],
+          hasPlan: false,
+          actualCount: 0,
+          actualHouseholds: 0,
+          actualWeight: 0,
+          actualDates: [],
+          hasActual: false
+        };
+        if (!rep) return res;
+
+        var pList = Array.isArray(rep.planSessions) ? rep.planSessions : [];
+        pList.forEach(function (s) {
+          if (isSessionFilled(s)) {
+            res.hasPlan = true;
+            res.planCount++;
+            if (s.date && String(s.date).trim() !== '') {
+              res.planDates.push(String(s.date).trim());
+            }
+            if (s.households !== '' && s.households !== null && !isNaN(Number(s.households))) {
+              res.planHouseholds += Number(s.households);
+            }
+            if (s.weight !== '' && s.weight !== null && !isNaN(Number(s.weight))) {
+              res.planWeight += Number(s.weight);
+            }
+          }
+        });
+
+        var aList = Array.isArray(rep.actualSessions) ? rep.actualSessions : [];
+        aList.forEach(function (s) {
+          if (isSessionFilled(s)) {
+            res.hasActual = true;
+            res.actualCount++;
+            if (s.date && String(s.date).trim() !== '') {
+              res.actualDates.push(String(s.date).trim());
+            }
+            if (s.households !== '' && s.households !== null && !isNaN(Number(s.households))) {
+              res.actualHouseholds += Number(s.households);
+            }
+            if (s.weight !== '' && s.weight !== null && !isNaN(Number(s.weight))) {
+              res.actualWeight += Number(s.weight);
+            }
+          }
+        });
+
+        res.planWeight = Math.round(res.planWeight * 10) / 10;
+        res.actualWeight = Math.round(res.actualWeight * 10) / 10;
+        return res;
+      }
+
+      function detectSaitamaArea(text) {
+        var s = String(text || '');
+        if (/さいたま|大宮|浦和|与野|岩槻|見沼|武蔵浦和|指扇|七里|宮原|土呂/.test(s)) return 'さいたま市';
+        if (/川口|蕨|戸田|草加|八潮|三郷|吉川|鳩ヶ谷|安行|芝園|谷塚/.test(s)) return '川口・県南';
+        if (/川越|所沢|狭山|入間|飯能|日高|坂戸|鶴ヶ島|ふじみ野|富士見|三芳|毛呂山|越生|上福岡|みずほ台/.test(s)) return '川越・県西';
+        if (/春日部|越谷|久喜|幸手|蓮田|白岡|加須|羽生|杉戸|宮代|松伏|武里|せんげん台|鷲宮|栗橋/.test(s)) return '春日部・県東';
+        if (/熊谷|深谷|本庄|行田|鴻巣|北本|桶川|上尾|伊奈|寄居|上里|美里|神川|籠原/.test(s)) return '熊谷・県北';
+        if (/東松山|秩父|小川|嵐山|滑川|吉見|川島|ときがわ|鳩山|横瀬|皆野|長瀞|小鹿野|東秩父/.test(s)) return '秩父・比企';
+        return 'さいたま市';
+      }
+
+      function formatDatesShort(datesArr) {
+        if (!Array.isArray(datesArr) || datesArr.length === 0) return '-';
+        var valid = datesArr.filter(function (d) { return d && String(d).trim() !== ''; });
+        if (valid.length === 0) return '-';
+        return valid.map(function (d) {
+          var p = String(d).split('-');
+          return p.length === 3 ? (Number(p[1]) + '/' + Number(p[2])) : d;
+        }).join(', ');
+      }
+
+      function formatDatesBadges(datesArr, type) {
+        if (!Array.isArray(datesArr) || datesArr.length === 0) {
+          return '<span style="color:var(--gray-500);">-</span>';
+        }
+        var valid = datesArr.filter(function (d) { return d && String(d).trim() !== ''; });
+        if (valid.length === 0) {
+          return '<span style="color:var(--gray-500);">-</span>';
+        }
+        return '<div class="date-pill-list">' + valid.map(function (d) {
+          var p = String(d).split('-');
+          var lbl = p.length === 3 ? (Number(p[1]) + '/' + Number(p[2])) : d;
+          return '<span class="date-chip ' + escapeHtml(type) + '">' + escapeHtml(lbl) + '</span>';
+        }).join('') + '</div>';
+      }
+
+      function getReportStatus(rep) {
+        var sum = summarizeMonthReport(rep);
+        if (sum.hasActual) return 'ACTUAL_DONE';
+        if (sum.hasPlan) return 'PLAN_ONLY';
+        return 'UNSUBMITTED';
+      }
+
+      function getStatusBadgeHtml(status) {
+        if (status === 'ACTUAL_DONE') {
+          return '<span class="status-badge status-done">実績報告済</span>';
+        }
+        if (status === 'PLAN_ONLY') {
+          return '<span class="status-badge status-plan">予定入力済</span>';
+        }
+        return '<span class="status-badge status-none">未報告</span>';
+      }
+
+      // ---------------------------------------------------------
+      // サンプル100団体（英数字混在4桁PIN付）＆4月〜12月実績生成
+      // ---------------------------------------------------------
+      function buildSample100Orgs() {
+        var list = [
+          // さいたま市 (20)
+          ['さいたま市', '大宮こども・フードパントリー'],
+          ['さいたま市', '浦和みんなのおうちパントリー'],
+          ['さいたま市', '与野ほっとスマイルパントリー'],
+          ['さいたま市', '岩槻つながりキッチン＆パントリー'],
+          ['さいたま市', '見沼グリーンフードパントリー'],
+          ['さいたま市', '南区ひだまりサポートパントリー'],
+          ['さいたま市', '北区つむぎ地域パントリー'],
+          ['さいたま市', '桜区わかばフードバンク窓口'],
+          ['さいたま市', '緑区あおば子ども食堂パントリー'],
+          ['さいたま市', '西区おひさまフードパントリー'],
+          ['さいたま市', '中央区ふれあい食品配布会'],
+          ['さいたま市', '大宮東口すまいるパントリー'],
+          ['さいたま市', '武蔵浦和駅なかまパントリー'],
+          ['さいたま市', '東浦和あたたかご飯の会'],
+          ['さいたま市', '指扇地域たすけあいパントリー'],
+          ['さいたま市', '七里みんなの食卓パントリー'],
+          ['さいたま市', '宮原キッズ＆ファミリー支援会'],
+          ['さいたま市', '北浦和はっぴーパントリー'],
+          ['さいたま市', '土呂にこにこフードパントリー'],
+          ['さいたま市', '浦和美園みらいパントリー'],
+          // 川口・県南 (20)
+          ['川口・県南', '川口みんなのおうちパントリー'],
+          ['川口・県南', '西川口つながるフードパントリー'],
+          ['川口・県南', '鳩ヶ谷あたたかサポート会'],
+          ['川口・県南', '蕨市すこやか子どもパントリー'],
+          ['川口・県南', '戸田公園スマイルパントリー'],
+          ['川口・県南', '草加せんべいの街フードパントリー'],
+          ['川口・県南', '八潮ほっとステーション'],
+          ['川口・県南', '三郷みらいフードパントリー'],
+          ['川口・県南', '吉川なまずの里パントリー'],
+          ['川口・県南', '東川口ひまわりパントリー'],
+          ['川口・県南', '安行みどりのフード支援'],
+          ['川口・県南', '芝園かけはしパントリー'],
+          ['川口・県南', '北戸田ファミリーサポート'],
+          ['川口・県南', '獨協大学前みんなのパントリー'],
+          ['川口・県南', '谷塚わくわくフード配布会'],
+          ['川口・県南', '新郷地域たすけあい窓口'],
+          ['川口・県南', '戸田笹目ほほえみパントリー'],
+          ['川口・県南', '三郷中央あしたばパントリー'],
+          ['川口・県南', '八潮南つばさパントリー'],
+          ['川口・県南', '川口元郷おむすびパントリー'],
+          // 川越・県西 (22)
+          ['川越・県西', '川越ほっとパントリー'],
+          ['川越・県西', '小江戸川越こころパントリー'],
+          ['川越・県西', '所沢トコトコフードパントリー'],
+          ['川越・県西', '新所沢みんなのおうち'],
+          ['川越・県西', '狭山茶の里スマイルパントリー'],
+          ['川越・県西', '入間あおぞらフードパントリー'],
+          ['川越・県西', '飯能やまびこ支援パントリー'],
+          ['川越・県西', '日高きんもくせいパントリー'],
+          ['川越・県西', '坂戸よさこいフードパントリー'],
+          ['川越・県西', '鶴ヶ島わかばサポート会'],
+          ['川越・県西', 'ふじみ野駅西口パントリー'],
+          ['川越・県西', '富士見市つるせパントリー'],
+          ['川越・県西', '三芳町みどりの食卓'],
+          ['川越・県西', '毛呂山ゆずの里パントリー'],
+          ['川越・県西', '越生うめの香フードパントリー'],
+          ['川越・県西', '霞ヶ関駅北口みんなのパントリー'],
+          ['川越・県西', '南古谷あぜみちパントリー'],
+          ['川越・県西', '小手指おひさまサポート'],
+          ['川越・県西', '航空公園ふれあいパントリー'],
+          ['川越・県西', '入間川河川敷スマイル配布会'],
+          ['川越・県西', '上福岡ほっこりパントリー'],
+          ['川越・県西', 'みずほ台つながりパントリー'],
+          // 春日部・県東 (18)
+          ['春日部・県東', '春日部ふじ棚フードパントリー'],
+          ['春日部・県東', '越谷つながりパントリー'],
+          ['春日部・県東', '南越谷レイクタウン支援窓口'],
+          ['春日部・県東', '久喜ちょうちんスマイルパントリー'],
+          ['春日部・県東', '幸手権現堂さくらパントリー'],
+          ['春日部・県東', '蓮田はすの実フードパントリー'],
+          ['春日部・県東', '白岡梨の里あたたかパントリー'],
+          ['春日部・県東', '加須こいのぼりパントリー'],
+          ['春日部・県東', '羽生あいあいフードパントリー'],
+          ['春日部・県東', '杉戸宿たすけあいパントリー'],
+          ['春日部・県東', '宮代進修館みんなのパントリー'],
+          ['春日部・県東', '松伏ゆめみ野パントリー'],
+          ['春日部・県東', '武里団地ほっとパントリー'],
+          ['春日部・県東', 'せんげん台わかばパントリー'],
+          ['春日部・県東', '北越谷おむすびサポート'],
+          ['春日部・県東', '鷲宮みらいフードパントリー'],
+          ['春日部・県東', '栗橋とねがわパントリー'],
+          ['春日部・県東', '騎西いちじくの里パントリー'],
+          // 熊谷・県北 (12)
+          ['熊谷・県北', '熊谷スマイルキッチン＆パントリー'],
+          ['熊谷・県北', '籠原あつまれフードパントリー'],
+          ['熊谷・県北', '深谷ねぎっこスマイルパントリー'],
+          ['熊谷・県北', '本庄はにぽんフードパントリー'],
+          ['熊谷・県北', '行田さきたま古墳パントリー'],
+          ['熊谷・県北', '鴻巣ひなの里フードパントリー'],
+          ['熊谷・県北', '北本トマトの街パントリー'],
+          ['熊谷・県北', '桶川べに花フードパントリー'],
+          ['熊谷・県北', '上尾あげおんスマイルパントリー'],
+          ['熊谷・県北', '伊奈バラのまちパントリー'],
+          ['熊谷・県北', '寄居かわせみフードパントリー'],
+          ['熊谷・県北', '上里こむぎっちパントリー'],
+          // 秩父・比企 (8)
+          ['秩父・比企', '東松山やきとり街パントリー'],
+          ['秩父・比企', '秩父夜祭ふれあいパントリー'],
+          ['秩父・比企', '小川町和紙の里パントリー'],
+          ['秩父・比企', '嵐山渓谷ほっとパントリー'],
+          ['秩父・比企', '滑川むさし野パントリー'],
+          ['秩父・比企', '吉見いちごの里パントリー'],
+          ['秩父・比企', '川島町すったてパントリー'],
+          ['秩父・比企', '皆野・長瀞清流パントリー']
+        ];
+
+        var usedPins = new Set();
+        return list.map(function (item, idx) {
+          var num = idx + 1;
+          var code = 'FP-' + String(num).padStart(3, '0');
+          var pin = generateUniqueAlnumPin(usedPins);
+          return {
+            id: 'org_' + num,
+            code: code,
+            area: item[0],
+            name: item[1],
+            pin: pin
+          };
+        });
+      }
+
+      function buildSampleReports(orgs) {
+        var reports = {};
+        var year = 2026;
+        var memos = [
+          '', '', '',
+          'お米・レトルト食品の寄付あり',
+          '複数回に分けて丁寧に配布しました',
+          '児童向けお菓子セットを追加配布',
+          '予約世帯のほぼ全員が来場されました'
+        ];
+
+        // 月1〜4回の現実的なサンプル開催回数
+        function getSessionCountForOrg(idx) {
+          if (idx % 10 === 0) return 4;
+          if (idx % 4 === 0) return 3;
+          if (idx % 2 === 0) return 2;
+          return 1;
+        }
+
+        function generateSessions(calYear, month, count, baseHPerSession, avgKg, includeActual, seed) {
+          var planSessions = [];
+          var actualSessions = [];
+          var stepDays = count === 4 ? 6 : (count === 3 ? 8 : (count === 2 ? 12 : 15));
+
+          for (var i = 0; i < count; i++) {
+            var day = Math.min(28, 3 + i * stepDays + (seed % 3));
+            var dateStr = calYear + '-' + String(month).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+            var pH = Math.max(10, baseHPerSession + ((seed + i) % 5) - 2);
+            var pW = Math.round(pH * avgKg * 10) / 10;
+
+            planSessions.push({
+              date: dateStr,
+              households: pH,
+              weight: pW
+            });
+
+            if (includeActual) {
+              var aH = Math.max(8, pH + ((seed + i * 2) % 5) - 2);
+              var aW = Math.round(aH * (avgKg + 0.2) * 10) / 10;
+              actualSessions.push({
+                date: dateStr,
+                households: aH,
+                weight: aW
+              });
+            }
+          }
+          return { planSessions: planSessions, actualSessions: actualSessions };
+        }
+
+        orgs.forEach(function (org, idx) {
+          var sessionCount = getSessionCountForOrg(idx);
+          var baseHPerSession = 18 + ((idx * 9) % 24);
+          var avgKg = 6.0 + ((idx % 5) * 0.5);
+
+          // 4月〜10月：実績報告済
+          [4, 5, 6, 7, 8, 9, 10].forEach(function (m) {
+            if ((idx + m) % 23 === 0) return;
+            var gen = generateSessions(year, m, sessionCount, baseHPerSession, avgKg, true, idx + m);
+            reports[year + '_' + org.id + '_' + m] = {
+              planSessions: gen.planSessions,
+              actualSessions: gen.actualSessions,
+              memo: memos[(idx + m) % memos.length]
+            };
+          });
+
+          // 11月：実績報告済・予定入力済・未報告が混在
+          if (idx % 10 !== 9) {
+            var done = (idx % 10 < 7) || (idx % 4 === 1);
+            var gen11 = generateSessions(year, 11, sessionCount, baseHPerSession, avgKg, done, idx + 11);
+            reports[year + '_' + org.id + '_11'] = {
+              planSessions: gen11.planSessions,
+              actualSessions: gen11.actualSessions,
+              memo: done ? memos[idx % memos.length] : '開催準備中'
+            };
+          }
+
+          // 12月：約6割が予定入力済
+          if (idx % 10 < 6) {
+            var gen12 = generateSessions(year, 12, sessionCount, baseHPerSession + 3, avgKg + 0.3, false, idx + 12);
+            reports[year + '_' + org.id + '_12'] = {
+              planSessions: gen12.planSessions,
+              actualSessions: [],
+              memo: '年末配布予定'
+            };
+          }
+        });
+
+        return reports;
+      }
+
+      // ---------------------------------------------------------
+      // ストレージ保存・読込
+      // ---------------------------------------------------------
+      function loadState() {
+        try {
+          var raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            var parsed = JSON.parse(raw);
+            if (parsed && Array.isArray(parsed.organizations)) {
+              state.mode = parsed.mode || 'demo';
+              state.fiscalYear = parsed.fiscalYear || 2026;
+              state.organizations = parsed.organizations;
+              state.reports = parsed.reports || {};
+              return;
+            }
+          }
+        } catch (e) {
+          console.error('loadState error:', e);
+        }
+        state.mode = 'demo';
+        state.fiscalYear = 2026;
+        state.organizations = buildSample100Orgs();
+        state.reports = buildSampleReports(state.organizations);
+        saveState();
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify({
+            mode: state.mode,
+            fiscalYear: state.fiscalYear,
+            organizations: state.organizations,
+            reports: state.reports
+          }));
+        } catch (e) {
+          console.error('saveState error:', e);
+          showToast('データの保存に失敗しました', true);
+        }
+      }
+
+      // ---------------------------------------------------------
+      // ヘッダー＆タブ切り替え
+      // ---------------------------------------------------------
+      function updateHeaderBadge() {
+        var badge = byId('header-mode-badge');
+        var demoHelper = byId('demo-pin-helper');
+        var countInd = byId('org-count-indicator');
+        if (countInd) {
+          countInd.textContent = '登録団体数: ' + state.organizations.length + '団体';
+        }
+        if (badge) {
+          if (state.mode === 'demo') {
+            badge.className = 'mode-badge demo';
+            badge.textContent = 'デモ体験モード（サンプル' + state.organizations.length + '団体）';
+          } else {
+            badge.className = 'mode-badge prod';
+            badge.textContent = '本番運用モード（登録' + state.organizations.length + '団体）';
+          }
+        }
+        if (demoHelper) {
+          if (state.mode === 'demo') {
+            demoHelper.classList.remove('hidden');
+          } else {
+            demoHelper.classList.add('hidden');
+          }
+        }
+      }
+
+      function switchTab(panelId) {
+        var buttons = document.querySelectorAll('.tab-btn');
+        var panels = document.querySelectorAll('.tab-panel');
+        buttons.forEach(function (btn) {
+          if (btn.getAttribute('data-tab') === panelId) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        });
+        panels.forEach(function (p) {
+          if (p.id === panelId) {
+            p.classList.add('active');
+          } else {
+            p.classList.remove('active');
+          }
+        });
+
+        if (panelId === 'panel-admin-summary') {
+          renderAdminSummary();
+        } else if (panelId === 'panel-org-master') {
+          renderMasterList();
+        } else if (panelId === 'panel-org-form') {
+          refreshOrgDropdown();
+          if (state.authenticatedOrgId) {
+            renderWorkspace();
+          }
+        }
+      }
+
+      // ---------------------------------------------------------
+      // タブ1：各団体向け月次報告フォーム（最大8回対応・英数字PIN認証）
+      // ---------------------------------------------------------
+      function refreshOrgDropdown() {
+        var areaEl = byId('form-area-filter');
+        var searchEl = byId('form-org-search');
+        var select = byId('form-org-select');
+        if (!select) return;
+
+        var areaVal = areaEl ? areaEl.value : 'ALL';
+        var searchVal = searchEl ? searchEl.value.trim().toLowerCase() : '';
+
+        var filtered = state.organizations.filter(function (o) {
+          var matchArea = areaVal === 'ALL' || o.area === areaVal;
+          var matchSearch = !searchVal ||
+            o.name.toLowerCase().indexOf(searchVal) !== -1 ||
+            o.code.toLowerCase().indexOf(searchVal) !== -1;
+          return matchArea && matchSearch;
+        });
+
+        if (filtered.length === 0) {
+          select.innerHTML = '<option value="">該当する団体がありません</option>';
+          var pinDisp = byId('demo-pin-display');
+          if (pinDisp) pinDisp.textContent = '----';
+          return;
+        }
+
+        select.innerHTML = filtered.map(function (o) {
+          return '<option value="' + escapeHtml(o.id) + '">' + escapeHtml(o.code + '｜' + o.name) + '</option>';
+        }).join('');
+
+        updateDemoPinHint();
+      }
+
+      function updateDemoPinHint() {
+        var select = byId('form-org-select');
+        var pinDisp = byId('demo-pin-display');
+        if (!select || !pinDisp) return;
+        var orgId = select.value;
+        var org = state.organizations.find(function (o) { return o.id === orgId; });
+        pinDisp.textContent = org ? org.pin : '----';
+      }
+
+      function unlockOrgForm() {
+        var select = byId('form-org-select');
+        var pinInput = byId('form-pin-input');
+        var monthSelect = byId('form-month-select');
+        if (!select || !pinInput || !monthSelect) return;
+
+        var orgId = select.value;
+        var pinVal = normalizePinInput(pinInput.value);
+        var selectedMonth = Number(monthSelect.value);
+
+        var org = state.organizations.find(function (o) { return o.id === orgId; });
+        if (!org) {
+          showToast('団体を選択してください（0件の場合はタブ③から登録してください）', true);
+          return;
+        }
+        if (pinVal !== normalizePinInput(org.pin)) {
+          showToast('PINコードが一致しません。4桁の専用PIN（英数字）をご確認ください。', true);
+          return;
+        }
+
+        state.authenticatedOrgId = org.id;
+        state.editingMonth = selectedMonth;
+        pinInput.value = '';
+        if (byId('auth-box')) byId('auth-box').classList.add('hidden');
+        if (byId('org-workspace')) byId('org-workspace').classList.remove('hidden');
+
+        renderWorkspace();
+        showToast('「' + org.name + '」の専用入力画面を開きました');
+      }
+
+      function lockOrgForm() {
+        state.authenticatedOrgId = null;
+        if (byId('org-workspace')) byId('org-workspace').classList.add('hidden');
+        if (byId('auth-box')) byId('auth-box').classList.remove('hidden');
+      }
+
+      function updateLiveTotals() {
+        var pCnt = 0, pHH = 0, pWt = 0;
+        state.planSessionsTemp.forEach(function (s) {
+          if (isSessionFilled(s)) {
+            pCnt++;
+            if (s.households !== '' && !isNaN(Number(s.households))) pHH += Number(s.households);
+            if (s.weight !== '' && !isNaN(Number(s.weight))) pWt += Number(s.weight);
+          }
+        });
+
+        var aCnt = 0, aHH = 0, aWt = 0;
+        state.actualSessionsTemp.forEach(function (s) {
+          if (isSessionFilled(s)) {
+            aCnt++;
+            if (s.households !== '' && !isNaN(Number(s.households))) aHH += Number(s.households);
+            if (s.weight !== '' && !isNaN(Number(s.weight))) aWt += Number(s.weight);
+          }
+        });
+
+        if (byId('live-plan-count')) byId('live-plan-count').textContent = pCnt;
+        if (byId('live-plan-hh')) byId('live-plan-hh').textContent = pHH.toLocaleString();
+        if (byId('live-plan-wt')) byId('live-plan-wt').textContent = (Math.round(pWt * 10) / 10).toFixed(1);
+
+        if (byId('live-actual-count')) byId('live-actual-count').textContent = aCnt;
+        if (byId('live-actual-hh')) byId('live-actual-hh').textContent = aHH.toLocaleString();
+        if (byId('live-actual-wt')) byId('live-actual-wt').textContent = (Math.round(aWt * 10) / 10).toFixed(1);
+      }
+
+      function renderSessionCards(type) {
+        var isPlan = type === 'plan';
+        var listEl = byId(isPlan ? 'plan-sessions-list' : 'actual-sessions-list');
+        var counterEl = byId(isPlan ? 'plan-slot-counter' : 'actual-slot-counter');
+        var addBtn = byId(isPlan ? 'add-plan-session-btn' : 'add-actual-session-btn');
+        if (!listEl) return;
+
+        var arr = isPlan ? state.planSessionsTemp : state.actualSessionsTemp;
+
+        if (counterEl) {
+          counterEl.textContent = '表示中: ' + arr.length + ' / ' + MAX_SESSIONS + ' 回';
+        }
+        if (addBtn) {
+          addBtn.disabled = arr.length >= MAX_SESSIONS;
+        }
+
+        listEl.innerHTML = arr.map(function (item, idx) {
+          var delBtn = arr.length > 1
+            ? '<button type="button" class="btn btn-danger btn-sm sess-del-btn" data-type="' + type + '" data-idx="' + idx + '" style="padding:2px 8px; font-size:11px;">削除</button>'
+            : '';
+          var dateLbl = isPlan ? '開催予定日' : '実施日';
+          var hhLbl = isPlan ? '予定世帯数' : '実績世帯数';
+          var wtLbl = isPlan ? '予定量(kg)' : '実績量(kg)';
+
+          return '<div class="session-card">' +
+            '<div class="session-card-head">' +
+            '<span class="session-num-badge ' + type + '">第 ' + (idx + 1) + ' 回開催</span>' +
+            delBtn +
+            '</div>' +
+            '<div class="session-fields">' +
+            '<div>' +
+            '<label class="session-field-lbl">' + dateLbl + '</label>' +
+            '<input type="date" class="session-input sess-inp" data-type="' + type + '" data-idx="' + idx + '" data-field="date" value="' + escapeHtml(item.date || '') + '" />' +
+            '</div>' +
+            '<div>' +
+            '<label class="session-field-lbl">' + hhLbl + '</label>' +
+            '<input type="number" min="0" step="1" placeholder="0" class="session-input sess-inp" data-type="' + type + '" data-idx="' + idx + '" data-field="households" value="' + escapeHtml(item.households !== null && item.households !== undefined ? item.households : '') + '" />' +
+            '</div>' +
+            '<div>' +
+            '<label class="session-field-lbl">' + wtLbl + '</label>' +
+            '<input type="number" min="0" step="0.1" placeholder="0.0" class="session-input sess-inp" data-type="' + type + '" data-idx="' + idx + '" data-field="weight" value="' + escapeHtml(item.weight !== null && item.weight !== undefined ? item.weight : '') + '" />' +
+            '</div>' +
+            '</div>' +
+            '</div>';
+        }).join('');
+
+        listEl.querySelectorAll('.sess-inp').forEach(function (inp) {
+          inp.addEventListener('input', function () {
+            var t = inp.getAttribute('data-type');
+            var i = Number(inp.getAttribute('data-idx'));
+            var f = inp.getAttribute('data-field');
+            var targetArr = t === 'plan' ? state.planSessionsTemp : state.actualSessionsTemp;
+            if (targetArr[i]) {
+              targetArr[i][f] = inp.value;
+            }
+            updateLiveTotals();
+          });
+        });
+
+        listEl.querySelectorAll('.sess-del-btn').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var t = btn.getAttribute('data-type');
+            var i = Number(btn.getAttribute('data-idx'));
+            var targetArr = t === 'plan' ? state.planSessionsTemp : state.actualSessionsTemp;
+            targetArr.splice(i, 1);
+            if (targetArr.length === 0) targetArr.push(createEmptySession());
+            renderSessionCards(t);
+            updateLiveTotals();
+          });
+        });
+      }
+
+      function renderWorkspace() {
+        var org = state.organizations.find(function (o) { return o.id === state.authenticatedOrgId; });
+        if (!org) {
+          lockOrgForm();
+          return;
+        }
+
+        if (byId('ws-org-meta')) {
+          byId('ws-org-meta').textContent = org.code + '｜' + org.area + '｜専用入力モード（月最大8回）';
+        }
+        if (byId('ws-org-title')) {
+          byId('ws-org-title').textContent = org.name;
+        }
+
+        var pillsEl = byId('ws-month-pills');
+        if (pillsEl) {
+          pillsEl.innerHTML = FISCAL_MONTHS.map(function (m) {
+            var key = state.fiscalYear + '_' + org.id + '_' + m;
+            var st = getReportStatus(state.reports[key]);
+            var dotClass = st === 'ACTUAL_DONE' ? 'done' : (st === 'PLAN_ONLY' ? 'plan' : '');
+            var activeClass = state.editingMonth === m ? ' active' : '';
+            return '<button type="button" class="month-pill' + activeClass + '" data-month="' + m + '">' +
+              m + '月<span class="pill-dot ' + dotClass + '"></span></button>';
+          }).join('');
+
+          pillsEl.querySelectorAll('.month-pill').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              state.editingMonth = Number(btn.getAttribute('data-month'));
+              renderWorkspace();
+            });
+          });
+        }
+
+        var calYear = state.editingMonth >= 4 ? state.fiscalYear : state.fiscalYear + 1;
+        if (byId('ws-current-month-heading')) {
+          byId('ws-current-month-heading').textContent =
+            calYear + '年 ' + state.editingMonth + '月分の予定・実績入力（第1回〜第8回）';
+        }
+
+        var key = state.fiscalYear + '_' + org.id + '_' + state.editingMonth;
+        var rep = state.reports[key] || {};
+        if (byId('ws-status-badge')) {
+          byId('ws-status-badge').innerHTML = getStatusBadgeHtml(getReportStatus(rep));
+        }
+
+        var savedPlan = Array.isArray(rep.planSessions) ? rep.planSessions.slice(0, MAX_SESSIONS) : [];
+        state.planSessionsTemp = savedPlan.map(function (s) {
+          return {
+            date: s.date || '',
+            households: s.households !== null && s.households !== undefined ? s.households : '',
+            weight: s.weight !== null && s.weight !== undefined ? s.weight : ''
+          };
+        });
+        while (state.planSessionsTemp.length < 2) {
+          state.planSessionsTemp.push(createEmptySession());
+        }
+
+        var savedActual = Array.isArray(rep.actualSessions) ? rep.actualSessions.slice(0, MAX_SESSIONS) : [];
+        state.actualSessionsTemp = savedActual.map(function (s) {
+          return {
+            date: s.date || '',
+            households: s.households !== null && s.households !== undefined ? s.households : '',
+            weight: s.weight !== null && s.weight !== undefined ? s.weight : ''
+          };
+        });
+        while (state.actualSessionsTemp.length < 2) {
+          state.actualSessionsTemp.push(createEmptySession());
+        }
+
+        renderSessionCards('plan');
+        renderSessionCards('actual');
+        updateLiveTotals();
+
+        if (byId('input-report-memo')) {
+          byId('input-report-memo').value = rep.memo || '';
+        }
+
+        renderOrgAnnualHistory(org);
+      }
+
+      function saveCurrentMonthReport() {
+        if (!state.authenticatedOrgId) return;
+        var key = state.fiscalYear + '_' + state.authenticatedOrgId + '_' + state.editingMonth;
+
+        var cleanPlan = state.planSessionsTemp
+          .filter(isSessionFilled)
+          .slice(0, MAX_SESSIONS)
+          .map(function (s) {
+            return {
+              date: s.date ? String(s.date).trim() : '',
+              households: s.households !== '' && !isNaN(Number(s.households)) ? Number(s.households) : null,
+              weight: s.weight !== '' && !isNaN(Number(s.weight)) ? Math.round(Number(s.weight) * 10) / 10 : null
+            };
+          });
+
+        var cleanActual = state.actualSessionsTemp
+          .filter(isSessionFilled)
+          .slice(0, MAX_SESSIONS)
+          .map(function (s) {
+            return {
+              date: s.date ? String(s.date).trim() : '',
+              households: s.households !== '' && !isNaN(Number(s.households)) ? Number(s.households) : null,
+              weight: s.weight !== '' && !isNaN(Number(s.weight)) ? Math.round(Number(s.weight) * 10) / 10 : null
+            };
+          });
+
+        var memoEl = byId('input-report-memo');
+        var memo = memoEl ? memoEl.value.trim() : '';
+
+        if (cleanPlan.length === 0 && cleanActual.length === 0 && !memo) {
+          delete state.reports[key];
+        } else {
+          state.reports[key] = {
+            planSessions: cleanPlan,
+            actualSessions: cleanActual,
+            memo: memo
+          };
+        }
+
+        saveState();
+        renderWorkspace();
+        showToast(state.editingMonth + '月分の報告データを保存しました！');
+      }
+
+      function renderOrgAnnualHistory(org) {
+        var tbody = byId('ws-annual-tbody');
+        var tfoot = byId('ws-annual-tfoot');
+        if (!tbody || !tfoot) return;
+
+        var sumPCnt = 0, sumPH = 0, sumPW = 0;
+        var sumACnt = 0, sumAH = 0, sumAW = 0;
+
+        tbody.innerHTML = FISCAL_MONTHS.map(function (m) {
+          var rep = state.reports[state.fiscalYear + '_' + org.id + '_' + m];
+          var st = getReportStatus(rep);
+          var s = summarizeMonthReport(rep);
+
+          sumPCnt += s.planCount;
+          sumPH += s.planHouseholds;
+          sumPW += s.planWeight;
+          sumACnt += s.actualCount;
+          sumAH += s.actualHouseholds;
+          sumAW += s.actualWeight;
+
+          var pDateStr = s.planCount > 0 ? ('[' + s.planCount + '回] ' + formatDatesShort(s.planDates)) : '-';
+          var aDateStr = s.actualCount > 0 ? ('[' + s.actualCount + '回] ' + formatDatesShort(s.actualDates)) : '-';
+
+          return '<tr>' +
+            '<td><strong>' + m + '月</strong></td>' +
+            '<td>' + getStatusBadgeHtml(st) + '</td>' +
+            '<td>' + escapeHtml(pDateStr) + '</td>' +
+            '<td class="text-right">' + (s.hasPlan ? s.planHouseholds.toLocaleString() + ' 世帯' : '-') + '</td>' +
+            '<td class="text-right">' + (s.hasPlan ? s.planWeight.toFixed(1) + ' kg' : '-') + '</td>' +
+            '<td>' + escapeHtml(aDateStr) + '</td>' +
+            '<td class="text-right"><strong>' + (s.hasActual ? s.actualHouseholds.toLocaleString() + ' 世帯' : '-') + '</strong></td>' +
+            '<td class="text-right"><strong>' + (s.hasActual ? s.actualWeight.toFixed(1) + ' kg' : '-') + '</strong></td>' +
+            '<td class="text-center"><button type="button" class="btn btn-outline btn-sm ws-edit-month-btn" data-m="' + m + '">編集</button></td>' +
+            '</tr>';
+        }).join('');
+
+        tfoot.innerHTML = '<tr>' +
+          '<td colspan="2" class="text-right">年間合計（4月〜3月）</td>' +
+          '<td>延べ ' + sumPCnt + ' 回</td>' +
+          '<td class="text-right">' + sumPH.toLocaleString() + ' 世帯</td>' +
+          '<td class="text-right">' + sumPW.toFixed(1) + ' kg</td>' +
+          '<td>延べ ' + sumACnt + ' 回</td>' +
+          '<td class="text-right">' + sumAH.toLocaleString() + ' 世帯</td>' +
+          '<td class="text-right">' + sumAW.toFixed(1) + ' kg</td>' +
+          '<td></td>' +
+          '</tr>';
+
+        tbody.querySelectorAll('.ws-edit-month-btn').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            state.editingMonth = Number(btn.getAttribute('data-m'));
+            renderWorkspace();
+          });
+        });
+      }
+
+      // ---------------------------------------------------------
+      // タブ2：事務局向け全体集計・ダッシュボード
+      // ---------------------------------------------------------
+      function openSessionDetailModal(orgId, periodVal) {
+        var org = state.organizations.find(function (o) { return o.id === orgId; });
+        if (!org) return;
+
+        var modal = byId('detail-modal');
+        var subEl = byId('detail-modal-sub');
+        var titleEl = byId('detail-modal-title');
+        var bodyEl = byId('detail-modal-body');
+        if (!modal || !subEl || !titleEl || !bodyEl) return;
+
+        subEl.textContent = org.code + '｜' + org.area;
+
+        if (periodVal !== 'ALL') {
+          var m = Number(periodVal);
+          titleEl.textContent = org.name + '｜' + state.fiscalYear + '年度 ' + m + '月 開催回別内訳（第1回〜第8回）';
+          var rep = state.reports[state.fiscalYear + '_' + org.id + '_' + m] || {};
+          var pArr = Array.isArray(rep.planSessions) ? rep.planSessions : [];
+          var aArr = Array.isArray(rep.actualSessions) ? rep.actualSessions : [];
+          var maxRows = Math.max(pArr.length, aArr.length, 1);
+
+          var rowsHtml = '';
+          for (var i = 0; i < maxRows; i++) {
+            var p = pArr[i] || {};
+            var a = aArr[i] || {};
+            rowsHtml += '<tr>' +
+              '<td><strong>第 ' + (i + 1) + ' 回</strong></td>' +
+              '<td style="background:#fffdf5;">' + escapeHtml(p.date || '-') + '</td>' +
+              '<td class="text-right" style="background:#fffdf5;">' + (p.households !== null && p.households !== undefined && p.households !== '' ? Number(p.households).toLocaleString() + ' 世帯' : '-') + '</td>' +
+              '<td class="text-right" style="background:#fffdf5;">' + (p.weight !== null && p.weight !== undefined && p.weight !== '' ? Number(p.weight).toFixed(1) + ' kg' : '-') + '</td>' +
+              '<td style="background:#f6fdf9;">' + escapeHtml(a.date || '-') + '</td>' +
+              '<td class="text-right" style="background:#f6fdf9; color:var(--emerald-700);"><strong>' + (a.households !== null && a.households !== undefined && a.households !== '' ? Number(a.households).toLocaleString() + ' 世帯' : '-') + '</strong></td>' +
+              '<td class="text-right" style="background:#f6fdf9; color:var(--emerald-700);"><strong>' + (a.weight !== null && a.weight !== undefined && a.weight !== '' ? Number(a.weight).toFixed(1) + ' kg' : '-') + '</strong></td>' +
+              '</tr>';
+          }
+
+          var s = summarizeMonthReport(rep);
+          bodyEl.innerHTML =
+            '<div class="table-scroll" style="max-height:380px;">' +
+            '<table>' +
+            '<thead><tr>' +
+            '<th>開催回</th>' +
+            '<th class="th-plan">開催予定日</th><th class="th-plan text-right">予定世帯</th><th class="th-plan text-right">予定量(kg)</th>' +
+            '<th class="th-actual">実施日</th><th class="th-actual text-right">実績世帯</th><th class="th-actual text-right">実績量(kg)</th>' +
+            '</tr></thead>' +
+            '<tbody>' + rowsHtml + '</tbody>' +
+            '<tfoot><tr>' +
+            '<td>月間合計</td>' +
+            '<td>計 ' + s.planCount + ' 回</td>' +
+            '<td class="text-right">' + s.planHouseholds.toLocaleString() + ' 世帯</td>' +
+            '<td class="text-right">' + s.planWeight.toFixed(1) + ' kg</td>' +
+            '<td>計 ' + s.actualCount + ' 回</td>' +
+            '<td class="text-right" style="color:#fde68a;">' + s.actualHouseholds.toLocaleString() + ' 世帯</td>' +
+            '<td class="text-right" style="color:#fde68a;">' + s.actualWeight.toFixed(1) + ' kg</td>' +
+            '</tr></tfoot>' +
+            '</table></div>' +
+            (rep.memo ? '<p style="margin-top:12px; padding:10px; background:var(--gray-50); border-radius:6px; font-size:13px;"><strong>備考：</strong>' + escapeHtml(rep.memo) + '</p>' : '');
+        } else {
+          titleEl.textContent = org.name + '｜' + state.fiscalYear + '年度 月別活動記録一覧（4月〜3月）';
+          var annualRowsHtml = FISCAL_MONTHS.map(function (m) {
+            var rep = state.reports[state.fiscalYear + '_' + org.id + '_' + m];
+            var s = summarizeMonthReport(rep);
+            return '<tr>' +
+              '<td><strong>' + m + '月</strong></td>' +
+              '<td>' + getStatusBadgeHtml(getReportStatus(rep)) + '</td>' +
+              '<td>' + (s.planCount > 0 ? ('[' + s.planCount + '回] ' + formatDatesShort(s.planDates)) : '-') + '</td>' +
+              '<td class="text-right">' + (s.hasPlan ? s.planHouseholds.toLocaleString() : '-') + '</td>' +
+              '<td class="text-right">' + (s.hasPlan ? s.planWeight.toFixed(1) : '-') + '</td>' +
+              '<td>' + (s.actualCount > 0 ? ('[' + s.actualCount + '回] ' + formatDatesShort(s.actualDates)) : '-') + '</td>' +
+              '<td class="text-right"><strong>' + (s.hasActual ? s.actualHouseholds.toLocaleString() : '-') + '</strong></td>' +
+              '<td class="text-right"><strong>' + (s.hasActual ? s.actualWeight.toFixed(1) : '-') + '</strong></td>' +
+              '</tr>';
+          }).join('');
+
+          bodyEl.innerHTML =
+            '<div class="table-scroll" style="max-height:420px;">' +
+            '<table><thead><tr>' +
+            '<th>月</th><th>状況</th>' +
+            '<th class="th-plan">予定日程</th><th class="th-plan text-right">予定世帯</th><th class="th-plan text-right">予定量(kg)</th>' +
+            '<th class="th-actual">実施日程</th><th class="th-actual text-right">実績世帯</th><th class="th-actual text-right">実績量(kg)</th>' +
+            '</tr></thead><tbody>' + annualRowsHtml + '</tbody></table></div>';
+        }
+
+        modal.classList.add('open');
+      }
+
+      function renderAdminSummary() {
+        var periodEl = byId('admin-period-select');
+        var areaEl = byId('admin-area-select');
+        var statusEl = byId('admin-status-select');
+        var searchEl = byId('admin-search-input');
+
+        var periodVal = periodEl ? periodEl.value : '11';
+        var areaVal = areaEl ? areaEl.value : 'ALL';
+        var statusVal = statusEl ? statusEl.value : 'ALL';
+        var searchVal = searchEl ? searchEl.value.trim().toLowerCase() : '';
+
+        var periodText = periodVal === 'ALL' ? '年度累計（4月〜3月合計）' : periodVal + '月分';
+        if (byId('admin-table-heading')) {
+          byId('admin-table-heading').textContent = state.fiscalYear + '年度 ' + periodText + ' 全団体集計一覧表';
+        }
+
+        var scopeOrgCount = 0;
+        var submittedCount = 0;
+        var grandPSess = 0, grandASess = 0;
+        var grandPH = 0, grandPW = 0, grandAH = 0, grandAW = 0;
+
+        var filteredRows = [];
+
+        state.organizations.forEach(function (org) {
+          if (areaVal !== 'ALL' && org.area !== areaVal) return;
+          scopeOrgCount++;
+
+          var status = 'UNSUBMITTED';
+          var pCount = 0, aCount = 0;
+          var pDates = [], aDates = [];
+          var pH = null, pW = null, aH = null, aW = null;
+
+          if (periodVal !== 'ALL') {
+            var m = Number(periodVal);
+            var rep = state.reports[state.fiscalYear + '_' + org.id + '_' + m];
+            status = getReportStatus(rep);
+            var s = summarizeMonthReport(rep);
+            pCount = s.planCount;
+            aCount = s.actualCount;
+            pDates = s.planDates;
+            aDates = s.actualDates;
+            if (s.hasPlan) { pH = s.planHouseholds; pW = s.planWeight; }
+            if (s.hasActual) { aH = s.actualHouseholds; aW = s.actualWeight; }
+          } else {
+            var sumPC = 0, sumAC = 0;
+            var sumPH = 0, sumPW = 0, sumAH = 0, sumAW = 0;
+            var hasP = false, hasA = false;
+            FISCAL_MONTHS.forEach(function (m) {
+              var rep = state.reports[state.fiscalYear + '_' + org.id + '_' + m];
+              var s = summarizeMonthReport(rep);
+              if (s.hasPlan) {
+                hasP = true;
+                sumPC += s.planCount;
+                sumPH += s.planHouseholds;
+                sumPW += s.planWeight;
+              }
+              if (s.hasActual) {
+                hasA = true;
+                sumAC += s.actualCount;
+                sumAH += s.actualHouseholds;
+                sumAW += s.actualWeight;
+              }
+            });
+            pCount = sumPC;
+            aCount = sumAC;
+            if (hasP) { pH = sumPH; pW = Math.round(sumPW * 10) / 10; }
+            if (hasA) { aH = sumAH; aW = Math.round(sumAW * 10) / 10; }
+            status = hasA ? 'ACTUAL_DONE' : (hasP ? 'PLAN_ONLY' : 'UNSUBMITTED');
+          }
+
+          if (status !== 'UNSUBMITTED') submittedCount++;
+          grandPSess += pCount;
+          grandASess += aCount;
+          if (pH !== null) grandPH += pH;
+          if (pW !== null) grandPW += pW;
+          if (aH !== null) grandAH += aH;
+          if (aW !== null) grandAW += aW;
+
+          if (statusVal === 'REPORTED' && status === 'UNSUBMITTED') return;
+          if (statusVal === 'ACTUAL_DONE' && status !== 'ACTUAL_DONE') return;
+          if (statusVal === 'PLAN_ONLY' && status !== 'PLAN_ONLY') return;
+          if (statusVal === 'UNSUBMITTED' && status !== 'UNSUBMITTED') return;
+          if (searchVal && org.name.toLowerCase().indexOf(searchVal) === -1 && org.code.toLowerCase().indexOf(searchVal) === -1) return;
+
+          filteredRows.push({
+            org: org,
+            status: status,
+            pCount: pCount,
+            aCount: aCount,
+            pDates: pDates,
+            aDates: aDates,
+            pH: pH,
+            pW: pW,
+            aH: aH,
+            aW: aW
+          });
+        });
+
+        var unsubmitCount = scopeOrgCount - submittedCount;
+        var rate = scopeOrgCount > 0 ? Math.round((submittedCount / scopeOrgCount) * 100) : 0;
+
+        if (byId('kpi-submit-val')) byId('kpi-submit-val').innerHTML = submittedCount + ' <span>/ ' + scopeOrgCount + ' 団体</span>';
+        if (byId('kpi-submit-rate')) byId('kpi-submit-rate').textContent = '提出率 ' + rate + '%';
+        if (byId('kpi-unsubmit-txt')) byId('kpi-unsubmit-txt').textContent = '未報告: ' + unsubmitCount + '団体';
+
+        if (byId('kpi-sessions-actual')) byId('kpi-sessions-actual').innerHTML = grandASess.toLocaleString() + ' <span>回（実績）</span>';
+        if (byId('kpi-sessions-plan')) byId('kpi-sessions-plan').textContent = grandPSess.toLocaleString();
+        var avgSessPerOrg = submittedCount > 0 ? (grandASess / submittedCount).toFixed(1) : '0.0';
+        if (byId('kpi-sessions-avg')) byId('kpi-sessions-avg').textContent = '平均 ' + avgSessPerOrg + '回/団体';
+
+        if (byId('kpi-hh-actual')) byId('kpi-hh-actual').innerHTML = grandAH.toLocaleString() + ' <span>世帯（実績）</span>';
+        if (byId('kpi-hh-plan')) byId('kpi-hh-plan').textContent = grandPH.toLocaleString();
+        var diffHH = grandAH - grandPH;
+        if (byId('kpi-hh-diff')) byId('kpi-hh-diff').textContent = '予定比 ' + (diffHH >= 0 ? '+' : '') + diffHH.toLocaleString() + '世帯';
+
+        if (byId('kpi-wt-actual')) byId('kpi-wt-actual').innerHTML = Math.round(grandAW).toLocaleString() + ' <span>kg</span>';
+        if (byId('kpi-wt-plan')) byId('kpi-wt-plan').textContent = Math.round(grandPW).toLocaleString();
+        var avgKgPerHH = grandAH > 0 ? (grandAW / grandAH).toFixed(1) : '0.0';
+        if (byId('kpi-wt-ton')) byId('kpi-wt-ton').textContent = '約 ' + (grandAW / 1000).toFixed(2) + ' トン（1世帯平均 ' + avgKgPerHH + 'kg）';
+
+        if (byId('admin-filtered-count')) {
+          byId('admin-filtered-count').textContent = '表示件数: ' + filteredRows.length + '件';
+        }
+
+        var tbody = byId('admin-summary-tbody');
+        var tfoot = byId('admin-summary-tfoot');
+        if (!tbody || !tfoot) return;
+
+        var fPC = 0, fAC = 0, fPH = 0, fPW = 0, fAH = 0, fAW = 0;
+
+        if (filteredRows.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="12" class="text-center" style="padding:24px; color:var(--gray-500);">該当する団体データがありません</td></tr>';
+        } else {
+          tbody.innerHTML = filteredRows.map(function (r) {
+            fPC += r.pCount;
+            fAC += r.aCount;
+            if (r.pH !== null) fPH += r.pH;
+            if (r.pW !== null) fPW += r.pW;
+            if (r.aH !== null) fAH += r.aH;
+            if (r.aW !== null) fAW += r.aW;
+
+            var datesCellHtml = '-';
+            if (periodVal !== 'ALL') {
+              var showDates = r.aDates.length > 0 ? r.aDates : r.pDates;
+              var badgeType = r.aDates.length > 0 ? 'actual' : 'plan';
+              datesCellHtml = formatDatesBadges(showDates, badgeType);
+            } else {
+              datesCellHtml = (r.pCount > 0 || r.aCount > 0)
+                ? ('実績延べ ' + r.aCount + '回 / 予定延べ ' + r.pCount + '回')
+                : '-';
+            }
+
+            var achieveRateTxt = '-';
+            if (r.pW !== null && r.pW > 0 && r.aW !== null) {
+              var pct = Math.round((r.aW / r.pW) * 100);
+              achieveRateTxt = '<strong>' + pct + '%</strong>';
+            }
+
+            return '<tr>' +
+              '<td style="font-family:monospace;">' + escapeHtml(r.org.code) + '</td>' +
+              '<td>' + escapeHtml(r.org.area) + '</td>' +
+              '<td><strong>' + escapeHtml(r.org.name) + '</strong></td>' +
+              '<td class="text-center">' + getStatusBadgeHtml(r.status) + '</td>' +
+              '<td class="text-center">' + r.pCount + '回 / <strong style="color:var(--emerald-700);">' + r.aCount + '回</strong></td>' +
+              '<td>' + datesCellHtml + '</td>' +
+              '<td class="text-right" style="background:#fffdf5;">' + (r.pH !== null ? r.pH.toLocaleString() : '-') + '</td>' +
+              '<td class="text-right" style="background:#f6fdf9; color:var(--emerald-700);"><strong>' + (r.aH !== null ? r.aH.toLocaleString() : '-') + '</strong></td>' +
+              '<td class="text-right" style="background:#fffdf5;">' + (r.pW !== null ? r.pW.toFixed(1) : '-') + '</td>' +
+              '<td class="text-right" style="background:#f6fdf9; color:var(--emerald-700);"><strong>' + (r.aW !== null ? r.aW.toFixed(1) : '-') + '</strong></td>' +
+              '<td class="text-center">' + achieveRateTxt + '</td>' +
+              '<td class="text-center"><button type="button" class="btn btn-outline btn-sm admin-detail-btn" data-org="' + escapeHtml(r.org.id) + '">内訳</button></td>' +
+              '</tr>';
+          }).join('');
+        }
+
+        var totalAchieve = fPW > 0 ? Math.round((fAW / fPW) * 100) + '%' : '-';
+        tfoot.innerHTML =
+          '<tr>' +
+          '<td colspan="4" class="text-right">表示中（' + filteredRows.length + '団体）合計</td>' +
+          '<td class="text-center">' + fPC + '回 / ' + fAC + '回</td>' +
+          '<td></td>' +
+          '<td class="text-right">' + fPH.toLocaleString() + '</td>' +
+          '<td class="text-right" style="color:#fde68a;">' + fAH.toLocaleString() + '</td>' +
+          '<td class="text-right">' + fPW.toFixed(1) + '</td>' +
+          '<td class="text-right" style="color:#fde68a;">' + fAW.toFixed(1) + '</td>' +
+          '<td class="text-center">' + totalAchieve + '</td>' +
+          '<td></td>' +
+          '</tr>';
+
+        tbody.querySelectorAll('.admin-detail-btn').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            openSessionDetailModal(btn.getAttribute('data-org'), periodVal);
+          });
+        });
+
+        renderCssMonthlyChart(areaVal);
+      }
+
+      function renderCssMonthlyChart(areaVal) {
+        var chartEl = byId('css-bar-chart');
+        var labelsEl = byId('css-bar-labels');
+        var headingEl = byId('chart-heading');
+        if (!chartEl || !labelsEl) return;
+
+        var isWeight = state.chartMetric === 'weight';
+        if (headingEl) {
+          headingEl.textContent = isWeight
+            ? '年間月別推移グラフ（4月〜翌3月 配布量kg推移）'
+            : '年間月別推移グラフ（4月〜翌3月 配布対象世帯数推移）';
+        }
+
+        var monthlyStats = FISCAL_MONTHS.map(function (m) {
+          var pW = 0, aW = 0, pH = 0, aH = 0;
+          state.organizations.forEach(function (org) {
+            if (areaVal !== 'ALL' && org.area !== areaVal) return;
+            var rep = state.reports[state.fiscalYear + '_' + org.id + '_' + m];
+            if (rep) {
+              var s = summarizeMonthReport(rep);
+              pW += s.planWeight;
+              aW += s.actualWeight;
+              pH += s.planHouseholds;
+              aH += s.actualHouseholds;
+            }
+          });
+          return {
+            month: m,
+            pVal: isWeight ? Math.round(pW) : pH,
+            aVal: isWeight ? Math.round(aW) : aH,
+            subTxt: isWeight ? (aH.toLocaleString() + '世帯') : (Math.round(aW).toLocaleString() + 'kg')
+          };
+        });
+
+        var maxVal = 10;
+        monthlyStats.forEach(function (s) {
+          if (s.pVal > maxVal) maxVal = s.pVal;
+          if (s.aVal > maxVal) maxVal = s.aVal;
+        });
+
+        var unit = isWeight ? 'kg' : '世帯';
+        chartEl.innerHTML = monthlyStats.map(function (s) {
+          var pHeight = Math.round((s.pVal / maxVal) * 140);
+          var aHeight = Math.round((s.aVal / maxVal) * 140);
+          var topVal = s.aVal > 0 ? (s.aVal.toLocaleString() + unit) : (s.pVal > 0 ? ('予' + s.pVal.toLocaleString()) : '');
+          return '<div class="chart-col" title="' + s.month + '月｜予定:' + s.pVal + unit + ' / 実績:' + s.aVal + unit + '">' +
+            '<div class="chart-val">' + topVal + '</div>' +
+            '<div class="chart-bars">' +
+            '<div class="bar-plan" style="height:' + Math.max(2, pHeight) + 'px;"></div>' +
+            '<div class="bar-actual" style="height:' + Math.max(2, aHeight) + 'px;"></div>' +
+            '</div>' +
+            '</div>';
+        }).join('');
+
+        labelsEl.innerHTML = monthlyStats.map(function (s) {
+          return '<div>' +
+            '<div class="chart-month-lbl">' + s.month + '月</div>' +
+            '<div class="chart-hh-lbl">' + s.subTxt + '</div>' +
+            '</div>';
+        }).join('');
+      }
+
+      // ---------------------------------------------------------
+      // CSV出力（Excel文字化け防止 BOM付きUTF-8）
+      // ---------------------------------------------------------
+      function downloadCsvFile(filename, rows) {
+        var csvStr = rows.map(function (row) {
+          return row.map(function (cell) {
+            var v = (cell === null || cell === undefined) ? '' : String(cell);
+            return '"' + v.replace(/"/g, '""') + '"';
+          }).join(',');
+        }).join('\r\n');
+
+        var bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+        var blob = new Blob([bom, csvStr], { type: 'text/csv;charset=utf-8;' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
+      function buildSessionColumnsHeader() {
+        var cols = [];
+        for (var i = 1; i <= MAX_SESSIONS; i++) {
+          cols.push('第' + i + '回_開催予定日', '第' + i + '回_予定世帯数', '第' + i + '回_予定量(kg)');
+        }
+        for (var j = 1; j <= MAX_SESSIONS; j++) {
+          cols.push('第' + j + '回_実施日', '第' + j + '回_実績世帯数', '第' + j + '回_実績量(kg)');
+        }
+        return cols;
+      }
+
+      function buildSessionColumnsValues(rep) {
+        var pArr = (rep && Array.isArray(rep.planSessions)) ? rep.planSessions : [];
+        var aArr = (rep && Array.isArray(rep.actualSessions)) ? rep.actualSessions : [];
+        var vals = [];
+        for (var i = 0; i < MAX_SESSIONS; i++) {
+          var p = pArr[i] || {};
+          vals.push(
+            p.date || '',
+            (p.households !== null && p.households !== undefined) ? p.households : '',
+            (p.weight !== null && p.weight !== undefined) ? p.weight : ''
+          );
+        }
+        for (var j = 0; j < MAX_SESSIONS; j++) {
+          var a = aArr[j] || {};
+          vals.push(
+            a.date || '',
+            (a.households !== null && a.households !== undefined) ? a.households : '',
+            (a.weight !== null && a.weight !== undefined) ? a.weight : ''
+          );
+        }
+        return vals;
+      }
+
+      function exportCurrentSummaryCsv() {
+        var periodEl = byId('admin-period-select');
+        var areaEl = byId('admin-area-select');
+        var statusEl = byId('admin-status-select');
+
+        var periodVal = periodEl ? periodEl.value : '11';
+        var areaVal = areaEl ? areaEl.value : 'ALL';
+        var statusVal = statusEl ? statusEl.value : 'ALL';
+        var pLabel = periodVal === 'ALL' ? '年度累計' : (periodVal + '月分');
+
+        var baseHeader = [
+          '年度', '対象期間', '団体コード', 'エリア', '団体名', '提出状況',
+          '予定開催回数', '配布予定世帯数合計', '配布予定量合計(kg)',
+          '実績開催回数', '配布実績世帯数合計', '配布実績量合計(kg)', '備考'
+        ];
+        var header = periodVal !== 'ALL' ? baseHeader.concat(buildSessionColumnsHeader()) : baseHeader;
+        var rows = [header];
+
+        state.organizations.forEach(function (org) {
+          if (areaVal !== 'ALL' && org.area !== areaVal) return;
+
+          if (periodVal !== 'ALL') {
+            var m = Number(periodVal);
+            var rep = state.reports[state.fiscalYear + '_' + org.id + '_' + m];
+            var st = getReportStatus(rep);
+            if (statusVal === 'REPORTED' && st === 'UNSUBMITTED') return;
+            if (statusVal === 'ACTUAL_DONE' && st !== 'ACTUAL_DONE') return;
+            if (statusVal === 'PLAN_ONLY' && st !== 'PLAN_ONLY') return;
+            if (statusVal === 'UNSUBMITTED' && st !== 'UNSUBMITTED') return;
+
+            var s = summarizeMonthReport(rep);
+            var stTxt = st === 'ACTUAL_DONE' ? '実績報告済' : (st === 'PLAN_ONLY' ? '予定入力済' : '未報告');
+            var row = [
+              state.fiscalYear + '年度', m + '月', org.code, org.area, org.name, stTxt,
+              s.planCount, s.hasPlan ? s.planHouseholds : '', s.hasPlan ? s.planWeight : '',
+              s.actualCount, s.hasActual ? s.actualHouseholds : '', s.hasActual ? s.actualWeight : '',
+              rep ? (rep.memo || '') : ''
+            ].concat(buildSessionColumnsValues(rep));
+            rows.push(row);
+          } else {
+            var pC = 0, pH = 0, pW = 0, aC = 0, aH = 0, aW = 0, hasP = false, hasA = false;
+            FISCAL_MONTHS.forEach(function (m) {
+              var rep = state.reports[state.fiscalYear + '_' + org.id + '_' + m];
+              var s = summarizeMonthReport(rep);
+              if (s.hasPlan) { hasP = true; pC += s.planCount; pH += s.planHouseholds; pW += s.planWeight; }
+              if (s.hasActual) { hasA = true; aC += s.actualCount; aH += s.actualHouseholds; aW += s.actualWeight; }
+            });
+            var st = hasA ? 'ACTUAL_DONE' : (hasP ? 'PLAN_ONLY' : 'UNSUBMITTED');
+            if (statusVal === 'REPORTED' && st === 'UNSUBMITTED') return;
+            if (statusVal === 'ACTUAL_DONE' && st !== 'ACTUAL_DONE') return;
+            if (statusVal === 'PLAN_ONLY' && st !== 'PLAN_ONLY') return;
+            if (statusVal === 'UNSUBMITTED' && st !== 'UNSUBMITTED') return;
+            var stTxt = st === 'ACTUAL_DONE' ? '実績あり' : (st === 'PLAN_ONLY' ? '予定のみ' : '未報告');
+            rows.push([
+              state.fiscalYear + '年度', '年度累計', org.code, org.area, org.name, stTxt,
+              pC, pH, pW.toFixed(1), aC, aH, aW.toFixed(1), ''
+            ]);
+          }
+        });
+
+        downloadCsvFile('埼玉フードパントリー集計表_' + state.fiscalYear + '年度_' + pLabel + '.csv', rows);
+        showToast('表示中の集計表CSVをダウンロードしました');
+      }
+
+      function exportAnnualAllCsv() {
+        var header = [
+          '年度', '対象月', '団体コード', 'エリア', '団体名', '提出状況',
+          '予定開催回数', '配布予定世帯数合計', '配布予定量合計(kg)',
+          '実績開催回数', '配布実績世帯数合計', '配布実績量合計(kg)', '備考'
+        ].concat(buildSessionColumnsHeader());
+
+        var rows = [header];
+
+        state.organizations.forEach(function (org) {
+          FISCAL_MONTHS.forEach(function (m) {
+            var rep = state.reports[state.fiscalYear + '_' + org.id + '_' + m];
+            var st = getReportStatus(rep);
+            var s = summarizeMonthReport(rep);
+            var stTxt = st === 'ACTUAL_DONE' ? '実績報告済' : (st === 'PLAN_ONLY' ? '予定入力済' : '未報告');
+            var row = [
+              state.fiscalYear + '年度', m + '月', org.code, org.area, org.name, stTxt,
+              s.planCount, s.hasPlan ? s.planHouseholds : '', s.hasPlan ? s.planWeight : '',
+              s.actualCount, s.hasActual ? s.actualHouseholds : '', s.hasActual ? s.actualWeight : '',
+              rep ? (rep.memo || '') : ''
+            ].concat(buildSessionColumnsValues(rep));
+            rows.push(row);
+          });
+        });
+
+        downloadCsvFile('埼玉フードパントリー年間全データ詳細_' + state.fiscalYear + '年度.csv', rows);
+        showToast('年間全データ詳細CSV（第1〜8回内訳含む）をダウンロードしました');
+      }
+
+      // ---------------------------------------------------------
+      // タブ3：団体マスタ・CSV一括取込＆英数字PIN一括再発行
+      // ---------------------------------------------------------
+      function parseCsvLine(line) {
+        var result = [];
+        var cur = '';
+        var inQuote = false;
+        for (var i = 0; i < line.length; i++) {
+          var ch = line[i];
+          if (inQuote) {
+            if (ch === '"' && line[i + 1] === '"') {
+              cur += '"';
+              i++;
+            } else if (ch === '"') {
+              inQuote = false;
+            } else {
+              cur += ch;
+            }
+          } else {
+            if (ch === '"') {
+              inQuote = true;
+            } else if (ch === ',') {
+              result.push(cur.trim());
+              cur = '';
+            } else {
+              cur += ch;
+            }
+          }
+        }
+        result.push(cur.trim());
+        return result;
+      }
+
+      function handleCsvFile(file) {
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          try {
+            var buffer = e.target.result;
+            var text = '';
+            try {
+              var utf8Decoder = new TextDecoder('utf-8', { fatal: true });
+              text = utf8Decoder.decode(buffer);
+            } catch (err) {
+              var sjisDecoder = new TextDecoder('shift-jis');
+              text = sjisDecoder.decode(buffer);
+            }
+
+            text = text.replace(/^\uFEFF/, '');
+            var lines = text.split(/\r?\n/).filter(function (l) { return l.trim() !== ''; });
+            if (lines.length === 0) {
+              showToast('CSVファイルが空です', true);
+              return;
+            }
+
+            var startIdx = 0;
+            var firstCols = parseCsvLine(lines[0]);
+            if (firstCols.some(function (c) { return /団体|コード|エリア|市町村|PIN/i.test(c); })) {
+              startIdx = 1;
+            }
+
+            var usedPins = getCurrentPinSet();
+            var parsedList = [];
+
+            for (var i = startIdx; i < lines.length; i++) {
+              var cols = parseCsvLine(lines[i]);
+              if (cols.length < 2) continue;
+              var code = cols[0] || ('FP-' + String(parsedList.length + 1).padStart(3, '0'));
+              var name = cols[1] || '';
+              if (!name) continue;
+              var city = cols[2] || '';
+              var areaRaw = cols[3] || '';
+              var pinRaw = normalizePinInput(cols[4] || '');
+
+              var validAreas = ['さいたま市', '川口・県南', '川越・県西', '春日部・県東', '熊谷・県北', '秩父・比企'];
+              var area = validAreas.indexOf(areaRaw) !== -1
+                ? areaRaw
+                : detectSaitamaArea(areaRaw + ' ' + city + ' ' + name);
+
+              var pin = '';
+              if (pinRaw.length === 4 && !usedPins.has(pinRaw)) {
+                pin = pinRaw;
+                usedPins.add(pin);
+              } else {
+                pin = generateUniqueAlnumPin(usedPins);
+              }
+
+              parsedList.push({
+                id: 'org_' + Date.now() + '_' + i,
+                code: code,
+                name: name,
+                area: area,
+                pin: pin
+              });
+            }
+
+            if (parsedList.length === 0) {
+              showToast('有効な団体データが見つかりませんでした。列順をご確認ください。', true);
+              return;
+            }
+
+            state.csvPreviewList = parsedList;
+            if (byId('csv-preview-summary')) {
+              byId('csv-preview-summary').textContent = '読込プレビュー: ' + parsedList.length + ' 団体検出（エリア自動判定・英数字PIN自動採番済）';
+            }
+            if (byId('csv-preview-tbody')) {
+              byId('csv-preview-tbody').innerHTML = parsedList.map(function (o) {
+                return '<tr>' +
+                  '<td style="font-family:monospace;">' + escapeHtml(o.code) + '</td>' +
+                  '<td><strong>' + escapeHtml(o.name) + '</strong></td>' +
+                  '<td>' + escapeHtml(o.area) + '</td>' +
+                  '<td class="pin-mono">' + escapeHtml(o.pin) + '</td>' +
+                  '</tr>';
+              }).join('');
+            }
+            if (byId('csv-preview-box')) {
+              byId('csv-preview-box').classList.remove('hidden');
+            }
+            showToast(parsedList.length + '件の団体データをプレビューに読み込みました');
+          } catch (err2) {
+            console.error(err2);
+            showToast('CSVの解析中にエラーが発生しました', true);
+          }
+        };
+        reader.readAsArrayBuffer(file);
+      }
+
+      function renderMasterList() {
+        if (byId('master-total-count')) {
+          byId('master-total-count').textContent = state.organizations.length;
+        }
+        var searchEl = byId('master-search-input');
+        var searchVal = searchEl ? searchEl.value.trim().toLowerCase() : '';
+
+        var filtered = state.organizations.filter(function (o) {
+          return !searchVal ||
+            o.name.toLowerCase().indexOf(searchVal) !== -1 ||
+            o.code.toLowerCase().indexOf(searchVal) !== -1 ||
+            o.area.toLowerCase().indexOf(searchVal) !== -1;
+        });
+
+        var tbody = byId('master-org-tbody');
+        if (!tbody) return;
+
+        if (filtered.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" class="text-center" style="padding:20px; color:var(--gray-500);">登録団体がありません</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = filtered.map(function (o) {
+          return '<tr>' +
+            '<td style="font-family:monospace;">' + escapeHtml(o.code) + '</td>' +
+            '<td>' + escapeHtml(o.area) + '</td>' +
+            '<td>' +
+            '<input type="text" class="form-control master-name-inp" data-id="' + escapeHtml(o.id) + '" value="' + escapeHtml(o.name) + '" style="padding:5px 8px;" />' +
+            '</td>' +
+            '<td class="text-center">' +
+            '<input type="text" class="form-control pin-mono master-pin-inp" data-id="' + escapeHtml(o.id) + '" value="' + escapeHtml(o.pin) + '" maxlength="4" style="width:100px; margin:0 auto; text-align:center; padding:5px 8px;" />' +
+            '</td>' +
+            '<td class="text-center" style="white-space:nowrap;">' +
+            '<button type="button" class="btn btn-outline btn-sm master-repin-btn" data-id="' + escapeHtml(o.id) + '">PIN再発行</button> ' +
+            '<button type="button" class="btn btn-danger btn-sm master-del-btn" data-id="' + escapeHtml(o.id) + '">削除</button>' +
+            '</td>' +
+            '</tr>';
+        }).join('');
+
+        tbody.querySelectorAll('.master-name-inp').forEach(function (inp) {
+          inp.addEventListener('change', function () {
+            var id = inp.getAttribute('data-id');
+            var val = inp.value.trim();
+            var org = state.organizations.find(function (x) { return x.id === id; });
+            if (org && val) {
+              org.name = val;
+              saveState();
+              refreshOrgDropdown();
+              showToast('団体名を更新しました');
+            }
+          });
+        });
+
+        tbody.querySelectorAll('.master-pin-inp').forEach(function (inp) {
+          inp.addEventListener('change', function () {
+            var id = inp.getAttribute('data-id');
+            var val = normalizePinInput(inp.value);
+            var org = state.organizations.find(function (x) { return x.id === id; });
+            if (org && val.length === 4) {
+              org.pin = val;
+              inp.value = val;
+              saveState();
+              refreshOrgDropdown();
+              showToast('専用PINコードを「' + val + '」に変更しました');
+            } else {
+              showToast('PINコードは4桁の半角英数字で入力してください', true);
+              renderMasterList();
+            }
+          });
+        });
+
+        tbody.querySelectorAll('.master-repin-btn').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var id = btn.getAttribute('data-id');
+            var org = state.organizations.find(function (x) { return x.id === id; });
+            if (org) {
+              var used = getCurrentPinSet(org.id);
+              org.pin = generateUniqueAlnumPin(used);
+              saveState();
+              renderMasterList();
+              refreshOrgDropdown();
+              showToast('「' + org.name + '」の新PINコード「' + org.pin + '」を発行しました');
+            }
+          });
+        });
+
+        tbody.querySelectorAll('.master-del-btn').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var id = btn.getAttribute('data-id');
+            state.organizations = state.organizations.filter(function (x) { return x.id !== id; });
+            saveState();
+            renderMasterList();
+            refreshOrgDropdown();
+            updateHeaderBadge();
+            showToast('団体をリストから削除しました');
+          });
+        });
+      }
+
+      // ---------------------------------------------------------
+      // イベントリスナー一括バインド（安全な存在チェック付き）
+      // ---------------------------------------------------------
+      function onClick(id, handler) {
+        var el = byId(id);
+        if (el) el.addEventListener('click', handler);
+      }
+
+      function onChange(id, handler) {
+        var el = byId(id);
+        if (el) el.addEventListener('change', handler);
+      }
+
+      function onInput(id, handler) {
+        var el = byId(id);
+        if (el) el.addEventListener('input', handler);
+      }
+
+      function bindAllEvents() {
+        // タブ切り替え
+        document.querySelectorAll('.tab-btn').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            switchTab(btn.getAttribute('data-tab'));
+          });
+        });
+
+        // タブ1：団体認証・検索
+        onChange('form-area-filter', refreshOrgDropdown);
+        onInput('form-org-search', refreshOrgDropdown);
+        onChange('form-org-select', updateDemoPinHint);
+
+        onClick('auto-fill-pin-btn', function () {
+          var pinDisp = byId('demo-pin-display');
+          var pinInp = byId('form-pin-input');
+          if (pinDisp && pinInp && pinDisp.textContent !== '----') {
+            pinInp.value = pinDisp.textContent;
+          }
+        });
+
+        onClick('unlock-org-btn', unlockOrgForm);
+        onClick('lock-org-btn', lockOrgForm);
+
+        var pinInputEl = byId('form-pin-input');
+        if (pinInputEl) {
+          pinInputEl.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') unlockOrgForm();
+          });
+        }
+
+        // タブ1：最大8回開催の追加・展開・一括コピー・保存・クリア
+        onClick('add-plan-session-btn', function () {
+          if (state.planSessionsTemp.length >= MAX_SESSIONS) {
+            showToast('開催予定は最大8回までです', true);
+            return;
+          }
+          state.planSessionsTemp.push(createEmptySession());
+          renderSessionCards('plan');
+        });
+
+        onClick('expand-plan-8-btn', function () {
+          while (state.planSessionsTemp.length < MAX_SESSIONS) {
+            state.planSessionsTemp.push(createEmptySession());
+          }
+          renderSessionCards('plan');
+          showToast('予定欄を8回分すべて展開しました');
+        });
+
+        onClick('add-actual-session-btn', function () {
+          if (state.actualSessionsTemp.length >= MAX_SESSIONS) {
+            showToast('開催実績は最大8回までです', true);
+            return;
+          }
+          state.actualSessionsTemp.push(createEmptySession());
+          renderSessionCards('actual');
+        });
+
+        onClick('expand-actual-8-btn', function () {
+          while (state.actualSessionsTemp.length < MAX_SESSIONS) {
+            state.actualSessionsTemp.push(createEmptySession());
+          }
+          renderSessionCards('actual');
+          showToast('実績欄を8回分すべて展開しました');
+        });
+
+        onClick('copy-plan-to-actual-btn', function () {
+          var valid = state.planSessionsTemp.filter(isSessionFilled);
+          if (valid.length === 0) {
+            showToast('コピー元の「予定」が入力されていません', true);
+            return;
+          }
+          state.actualSessionsTemp = valid.slice(0, MAX_SESSIONS).map(function (s) {
+            return {
+              date: s.date || '',
+              households: s.households !== null && s.households !== undefined ? s.households : '',
+              weight: s.weight !== null && s.weight !== undefined ? s.weight : ''
+            };
+          });
+          while (state.actualSessionsTemp.length < 2) {
+            state.actualSessionsTemp.push(createEmptySession());
+          }
+          renderSessionCards('actual');
+          updateLiveTotals();
+          showToast('全' + valid.length + '回分の予定内容を実績へ一括コピーしました');
+        });
+
+        onClick('save-month-report-btn', saveCurrentMonthReport);
+
+        onClick('clear-month-report-btn', function () {
+          if (!state.authenticatedOrgId) return;
+          var key = state.fiscalYear + '_' + state.authenticatedOrgId + '_' + state.editingMonth;
+          delete state.reports[key];
+          saveState();
+          renderWorkspace();
+          showToast(state.editingMonth + '月分の入力内容をクリアしました');
+        });
+
+        // 詳細モーダル閉じる
+        var detailModal = byId('detail-modal');
+        onClick('close-detail-modal-btn', function () {
+          if (detailModal) detailModal.classList.remove('open');
+        });
+        if (detailModal) {
+          detailModal.addEventListener('click', function (e) {
+            if (e.target === detailModal) detailModal.classList.remove('open');
+          });
+        }
+
+        // タブ2：事務局集計フィルタ＆グラフ切替＆CSV出力
+        onChange('admin-period-select', renderAdminSummary);
+        onChange('admin-area-select', renderAdminSummary);
+        onChange('admin-status-select', renderAdminSummary);
+        onInput('admin-search-input', renderAdminSummary);
+
+        onClick('chart-mode-wt-btn', function () {
+          state.chartMetric = 'weight';
+          var wtBtn = byId('chart-mode-wt-btn');
+          var hhBtn = byId('chart-mode-hh-btn');
+          if (wtBtn) { wtBtn.className = 'btn btn-navy btn-sm'; wtBtn.style.border = ''; }
+          if (hhBtn) { hhBtn.className = 'btn btn-outline btn-sm'; hhBtn.style.border = 'none'; }
+          var areaEl = byId('admin-area-select');
+          renderCssMonthlyChart(areaEl ? areaEl.value : 'ALL');
+        });
+
+        onClick('chart-mode-hh-btn', function () {
+          state.chartMetric = 'households';
+          var wtBtn = byId('chart-mode-wt-btn');
+          var hhBtn = byId('chart-mode-hh-btn');
+          if (hhBtn) { hhBtn.className = 'btn btn-navy btn-sm'; hhBtn.style.border = ''; }
+          if (wtBtn) { wtBtn.className = 'btn btn-outline btn-sm'; wtBtn.style.border = 'none'; }
+          var areaEl = byId('admin-area-select');
+          renderCssMonthlyChart(areaEl ? areaEl.value : 'ALL');
+        });
+
+        onClick('export-current-csv-btn', exportCurrentSummaryCsv);
+        onClick('export-annual-csv-btn', exportAnnualAllCsv);
+
+        // タブ3：CSVテンプレートDL・ドラッグ＆ドロップ・PIN一括再発行・CSV出力・個別追加
+        onClick('download-csv-template-btn', function () {
+          downloadCsvFile('埼玉フードパントリー団体登録テンプレート.csv', [
+            ['団体コード', '団体名', '市町村', 'エリア', 'PINコード'],
+            ['FP-001', '大宮こども・フードパントリー', 'さいたま市大宮区', 'さいたま市', 'K4M9'],
+            ['FP-002', '川口みんなのおうちパントリー', '川口市', '川口・県南', 'A7R2'],
+            ['FP-003', '川越ほっとパントリー', '川越市', '', '']
+          ]);
+          showToast('入力用CSVテンプレートをダウンロードしました');
+        });
+
+        var dropZone = byId('csv-drop-zone');
+        var csvInput = byId('csv-file-input');
+        if (dropZone && csvInput) {
+          dropZone.addEventListener('click', function () {
+            csvInput.click();
+          });
+          dropZone.addEventListener('dragover', function (e) {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+          });
+          dropZone.addEventListener('dragleave', function () {
+            dropZone.classList.remove('dragover');
+          });
+          dropZone.addEventListener('drop', function (e) {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+              handleCsvFile(e.dataTransfer.files[0]);
+            }
+          });
+          csvInput.addEventListener('change', function (e) {
+            if (e.target.files && e.target.files[0]) {
+              handleCsvFile(e.target.files[0]);
+              csvInput.value = '';
+            }
+          });
+        }
+
+        onClick('csv-import-replace-btn', function () {
+          if (!state.csvPreviewList.length) return;
+          state.organizations = state.csvPreviewList.slice();
+          state.mode = 'prod';
+          state.authenticatedOrgId = null;
+          state.csvPreviewList = [];
+          if (byId('csv-preview-box')) byId('csv-preview-box').classList.add('hidden');
+          saveState();
+          updateHeaderBadge();
+          renderMasterList();
+          refreshOrgDropdown();
+          showToast(state.organizations.length + '団体で団体リストを上書き登録しました');
+        });
+
+        onClick('csv-import-append-btn', function () {
+          if (!state.csvPreviewList.length) return;
+          state.organizations = state.organizations.concat(state.csvPreviewList);
+          state.mode = 'prod';
+          var addedCount = state.csvPreviewList.length;
+          state.csvPreviewList = [];
+          if (byId('csv-preview-box')) byId('csv-preview-box').classList.add('hidden');
+          saveState();
+          updateHeaderBadge();
+          renderMasterList();
+          refreshOrgDropdown();
+          showToast(addedCount + '団体を追加登録しました');
+        });
+
+        onClick('csv-preview-cancel-btn', function () {
+          state.csvPreviewList = [];
+          if (byId('csv-preview-box')) byId('csv-preview-box').classList.add('hidden');
+        });
+
+        onClick('bulk-reissue-pin-btn', function () {
+          if (state.organizations.length === 0) {
+            showToast('登録されている団体がありません', true);
+            return;
+          }
+          var used = new Set();
+          state.organizations.forEach(function (org) {
+            org.pin = generateUniqueAlnumPin(used);
+          });
+          saveState();
+          renderMasterList();
+          refreshOrgDropdown();
+          showToast('全' + state.organizations.length + '団体のPINコードを英数字混在4桁で一括再発行しました');
+        });
+
+        onClick('export-master-pin-csv-btn', function () {
+          var rows = [['団体コード', 'エリア', '団体名', '専用PINコード（英数字4桁）']];
+          state.organizations.forEach(function (o) {
+            rows.push([o.code, o.area, o.name, o.pin]);
+          });
+          downloadCsvFile('埼玉フードパントリー団体マスタ_PIN一覧.csv', rows);
+          showToast('団体マスタ・PIN一覧CSVをダウンロードしました');
+        });
+
+        onClick('add-single-org-btn', function () {
+          var codeInp = byId('new-org-code');
+          var areaInp = byId('new-org-area');
+          var nameInp = byId('new-org-name');
+          var pinInp = byId('new-org-pin');
+          if (!nameInp) return;
+
+          var name = nameInp.value.trim();
+          if (!name) {
+            showToast('団体名を入力してください', true);
+            return;
+          }
+          var code = (codeInp && codeInp.value.trim()) ? codeInp.value.trim() : ('FP-' + String(state.organizations.length + 1).padStart(3, '0'));
+          var area = areaInp ? areaInp.value : 'さいたま市';
+          var rawPin = pinInp ? normalizePinInput(pinInp.value) : '';
+          var used = getCurrentPinSet();
+          var pin = rawPin.length === 4 ? rawPin : generateUniqueAlnumPin(used);
+
+          state.organizations.push({
+            id: 'org_' + Date.now(),
+            code: code,
+            area: area,
+            name: name,
+            pin: pin
+          });
+          if (codeInp) codeInp.value = '';
+          nameInp.value = '';
+          if (pinInp) pinInp.value = '';
+          saveState();
+          updateHeaderBadge();
+          renderMasterList();
+          refreshOrgDropdown();
+          showToast('「' + name + '」（PIN: ' + pin + '）を登録しました');
+        });
+
+        onInput('master-search-input', renderMasterList);
+
+        // 本番モード切替・データ管理モーダル
+        var dataModal = byId('data-modal');
+        onClick('open-data-modal-btn', function () {
+          if (dataModal) dataModal.classList.add('open');
+        });
+        onClick('close-data-modal-btn', function () {
+          if (dataModal) dataModal.classList.remove('open');
+        });
+        if (dataModal) {
+          dataModal.addEventListener('click', function (e) {
+            if (e.target === dataModal) dataModal.classList.remove('open');
+          });
+        }
+
+        onClick('mode-clear-reports-btn', function () {
+          state.reports = {};
+          state.mode = 'prod';
+          saveState();
+          updateHeaderBadge();
+          if (state.authenticatedOrgId) renderWorkspace();
+          renderAdminSummary();
+          if (dataModal) dataModal.classList.remove('open');
+          showToast('サンプル実績を消去し、本番運用モードに切り替えました');
+        });
+
+        onClick('mode-full-reset-btn', function () {
+          state.organizations = [];
+          state.reports = {};
+          state.mode = 'prod';
+          state.authenticatedOrgId = null;
+          lockOrgForm();
+          saveState();
+          updateHeaderBadge();
+          refreshOrgDropdown();
+          renderAdminSummary();
+          renderMasterList();
+          if (dataModal) dataModal.classList.remove('open');
+          showToast('すべてのデータを消去し、空の本番運用モードへ初期化しました');
+        });
+
+        onClick('mode-restore-demo-btn', function () {
+          state.mode = 'demo';
+          state.organizations = buildSample100Orgs();
+          state.reports = buildSampleReports(state.organizations);
+          state.authenticatedOrgId = null;
+          lockOrgForm();
+          saveState();
+          updateHeaderBadge();
+          refreshOrgDropdown();
+          renderAdminSummary();
+          renderMasterList();
+          if (dataModal) dataModal.classList.remove('open');
+          showToast('デモ用100団体サンプルデータ（英数字4桁PIN付）を再読込しました');
+        });
+
+        onClick('backup-json-export-btn', function () {
+          var payload = JSON.stringify({
+            mode: state.mode,
+            fiscalYear: state.fiscalYear,
+            organizations: state.organizations,
+            reports: state.reports,
+            exportedAt: new Date().toISOString()
+          }, null, 2);
+          var blob = new Blob([payload], { type: 'application/json' });
+          var url = URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = 'saitama-foodpantry-backup-' + state.fiscalYear + '.json';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          showToast('全データJSONバックアップを保存しました');
+        });
+
+        var backupInput = byId('backup-json-file-input');
+        onClick('backup-json-import-btn', function () {
+          if (backupInput) backupInput.click();
+        });
+        if (backupInput) {
+          backupInput.addEventListener('change', function (e) {
+            var file = e.target.files && e.target.files[0];
+            if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function (ev) {
+              try {
+                var parsed = JSON.parse(ev.target.result);
+                if (!parsed || !Array.isArray(parsed.organizations)) {
+                  showToast('無効なバックアップファイルです', true);
+                  return;
+                }
+                state.mode = parsed.mode || 'prod';
+                state.fiscalYear = parsed.fiscalYear || 2026;
+                state.organizations = parsed.organizations;
+                state.reports = parsed.reports || {};
+                state.authenticatedOrgId = null;
+                lockOrgForm();
+                saveState();
+                updateHeaderBadge();
+                refreshOrgDropdown();
+                renderAdminSummary();
+                renderMasterList();
+                if (dataModal) dataModal.classList.remove('open');
+                showToast('バックアップファイルからデータを復元しました');
+              } catch (err) {
+                console.error(err);
+                showToast('JSONファイルの読み込みに失敗しました', true);
+              }
+            };
+            reader.readAsText(file);
+            backupInput.value = '';
+          });
+        }
+      }
+
+      // ---------------------------------------------------------
+      // アプリ初期化エントリーポイント
+      // ---------------------------------------------------------
+      function initApp() {
+        try {
+          loadState();
+          bindAllEvents();
+          updateHeaderBadge();
+          refreshOrgDropdown();
+          renderAdminSummary();
+          renderMasterList();
+        } catch (e) {
+          console.error('Initialization error:', e);
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initApp);
+      } else {
+        initApp();
+      }
+    })();
+  </script>
+</body>
+</html>
